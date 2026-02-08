@@ -9,13 +9,13 @@ interface Props {
 }
 
 const {
-  title = "Links — Dileepa Bandara",
+  title = "Links | Dileepa Bandara",
   description = "A curated collection of links and social profiles.",
 } = Astro.props;
 
 const site = import.meta.env.SITE ?? "https://links.dileepa.dev";
 const canonical = new URL(Astro.url.pathname, site).href;
-const ogImage = new URL("/images/banners/2026-01-30-welcome.png", site).href;
+const ogImage = new URL("/images/cover.webp", site).href;
 const twitterHandle = "@dileepadev";
 ---
 
