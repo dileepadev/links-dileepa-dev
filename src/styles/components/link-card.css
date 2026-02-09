@@ -1,0 +1,8 @@
+/* Component-specific styles for LinkCard component.
+   Add small utility overrides here if needed. */
+
+/* Ensure copy button uses consistent transition */
+.copy-btn {
+  transition: transform 140ms ease, background-color 160ms ease, color 160ms ease;
+}
+.copy-btn:active { transform: scale(0.98); }

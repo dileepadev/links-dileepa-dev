@@ -1,0 +1,6 @@
+/* Component-specific styles for Welcome component.
+   Moved here from inline <style> blocks so all styles live in src/styles.
+   Keep component-specific overrides here. */
+
+/* Example: add a small spacing helper used only by Welcome */
+.welcome-cta { margin-top: 1rem; }
