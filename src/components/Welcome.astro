@@ -10,7 +10,7 @@ import links from "../data/links.json";
   </div>
 
   <main class="max-w-xl mx-auto relative z-10">
-    <header class="text-center mb-12 animate-fade-in">
+    <header class="text-center mb-12 animate-fade-in animate-slide-down">
       <h1
         class="text-4xl md:text-5xl font-extrabold text-text-primary mb-3 tracking-tight"
       >
@@ -23,8 +23,11 @@ import links from "../data/links.json";
 
     <div class="space-y-4">
       {
-        links.map((link) => (
-          <div class="group relative flex items-center p-4 rounded-xl bg-bg-secondary border border-border-light hover:border-accent-blue hover:bg-bg-tertiary transition-all duration-300 shadow-sm hover:shadow-md">
+        links.map((link, i) => (
+          <div
+            class="group relative flex items-center p-4 rounded-xl bg-bg-secondary border border-border-light hover:border-accent-blue hover:bg-bg-tertiary transition-all duration-300 shadow-sm hover:shadow-md animate-slide-up"
+            style={`animation-delay: ${i * 80}ms`}
+          >
             {/* Social Icon */}
             <div
               class="w-12 h-12 flex items-center justify-center rounded-lg bg-bg-primary text-accent-blue shadow-inner group-hover:scale-110 transition-transform duration-300"
