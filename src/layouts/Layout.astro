@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import pkg from "../../package.json";
+import links from "../data/links.json";
 
 interface Props {
   title?: string;
@@ -17,6 +18,29 @@ const site = import.meta.env.SITE ?? "https://links.dileepa.dev";
 const canonical = new URL(Astro.url.pathname, site).href;
 const ogImage = new URL("/images/cover.webp", site).href;
 const twitterHandle = "@dileepadev";
+
+const sameAs = links
+  .filter((l) => l.url && !l.url.startsWith("mailto:"))
+  .map((l) => l.url);
+
+const jsonLd = JSON.stringify([
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Dileepa Bandara",
+    url: site,
+    sameAs,
+    image: ogImage,
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    url: site,
+    name: title,
+    description,
+  },
+]);
 ---
 
 <!doctype html>
@@ -42,6 +66,15 @@ const twitterHandle = "@dileepadev";
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta property="og:image:alt" content={description} />
+    <meta name="twitter:image:alt" content={description} />
+    <meta property="og:locale" content="en_US" />
+    <link rel="image_src" href={ogImage} />
+
+    <script type="application/ld+json" is:inline>
+      {jsonLd}
+    </script>
+
     <meta name="color-scheme" content="light dark" />
     <meta
       name="theme-color"
