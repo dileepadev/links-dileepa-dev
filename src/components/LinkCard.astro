@@ -20,13 +20,13 @@ const urlEsc = JSON.stringify(link.url);
   />
 
   <!-- Content -->
-  <div class="ml-4 grow">
+  <div class="ml-4 grow min-w-0">
     <h2
-      class="text-lg font-bold text-text-primary group-hover:text-accent-blue transition-colors"
+      class="text-lg font-bold text-text-primary group-hover:text-accent-blue transition-colors truncate"
     >
       {link.name}
     </h2>
-    <p class="text-sm text-text-muted">{link.handle}</p>
+    <p class="text-sm text-text-muted truncate">{link.handle}</p>
   </div>
 
   <!-- Actions -->
