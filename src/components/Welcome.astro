@@ -12,7 +12,7 @@ import "../styles/components/welcome.css";
   >
   </div>
 
-  <main class="max-w-xl mx-auto relative z-10">
+  <main class="max-w-4xl mx-auto relative z-10">
     <header class="text-center mb-12 animate-fade-in animate-slide-down">
       <div
         class="group relative w-30 sm:w-34 md:w-38 h-30 sm:h-34 md:h-38 rounded-full overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl ring-4 ring-white/10 mx-auto"
@@ -35,7 +35,7 @@ import "../styles/components/welcome.css";
       </p>
     </header>
 
-    <div class="space-y-4">
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
       {links.map((link, i) => <LinkCard link={link} index={i} />)}
     </div>
 
