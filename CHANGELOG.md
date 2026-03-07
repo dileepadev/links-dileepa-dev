@@ -13,7 +13,7 @@ Changes are organized into the following categories:
 
 - Changes for the next release are available in development branches.
 
-## [v1.0.0] - 2026-02-10
+## [v1.0.0] - 2026-03-08
 
 ### Added - v1.0.0
 
@@ -35,6 +35,20 @@ Changes are organized into the following categories:
 - Respect system theme preference where possible
 - Configure SEO basics (meta tags, social preview)
 - Add README with setup and usage instructions
+- Add analytics and monitoring:
+  - Microsoft Clarity
+  - Google Analytics
+- Add links:
+  - Website
+  - Blog
+  - Links
+  - GitHub
+  - LinkedIn
+  - X (Twitter)
+  - Instagram
+  - YouTube
+  - Facebook
+  - Email
 
 <!-- e.g., -->
 <!-- Unreleased -->
