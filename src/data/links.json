@@ -1,56 +1,71 @@
 [
   {
-    "name": "Website",
-    "handle": "dileepa.dev",
-    "url": "https://dileepa.dev",
-    "icon": "website"
+    "group": "Site",
+    "links": [
+      {
+        "name": "Website",
+        "handle": "dileepa.dev",
+        "url": "https://dileepa.dev",
+        "icon": "website"
+      },
+      {
+        "name": "Blog",
+        "handle": "dileepa.dev/blog",
+        "url": "https://dileepa.dev/blog",
+        "icon": "blog"
+      }
+    ]
   },
   {
-    "name": "Blog",
-    "handle": "dileepa.dev/blog",
-    "url": "https://dileepa.dev/blog",
-    "icon": "blog"
+    "group": "Social",
+    "links": [
+      {
+        "name": "GitHub",
+        "handle": "@dileepadev",
+        "url": "https://github.com/dileepadev",
+        "icon": "github"
+      },
+      {
+        "name": "LinkedIn",
+        "handle": "@dileepadev",
+        "url": "https://linkedin.com/in/dileepadev",
+        "icon": "linkedin"
+      },
+      {
+        "name": "X (Twitter)",
+        "handle": "@dileepadev",
+        "url": "https://twitter.com/dileepadev",
+        "icon": "xtwitter"
+      },
+      {
+        "name": "Instagram",
+        "handle": "@dileepadev",
+        "url": "https://instagram.com/dileepadev",
+        "icon": "instagram"
+      },
+      {
+        "name": "YouTube",
+        "handle": "@dileepadev",
+        "url": "https://youtube.com/@dileepadev",
+        "icon": "youtube"
+      },
+      {
+        "name": "Facebook",
+        "handle": "@dileepadev",
+        "url": "https://www.facebook.com/dileepadev",
+        "icon": "facebook"
+      }
+    ]
   },
   {
-    "name": "GitHub",
-    "handle": "@dileepadev",
-    "url": "https://github.com/dileepadev",
-    "icon": "github"
-  },
-  {
-    "name": "LinkedIn",
-    "handle": "@dileepadev",
-    "url": "https://linkedin.com/in/dileepadev",
-    "icon": "linkedin"
-  },
-  {
-    "name": "X (Twitter)",
-    "handle": "@dileepadev",
-    "url": "https://twitter.com/dileepadev",
-    "icon": "xtwitter"
-  },
-  {
-    "name": "Instagram",
-    "handle": "@dileepadev",
-    "url": "https://instagram.com/dileepadev",
-    "icon": "instagram"
-  },
-  {
-    "name": "YouTube",
-    "handle": "@dileepadev",
-    "url": "https://youtube.com/@dileepadev",
-    "icon": "youtube"
-  },
-  {
-    "name": "Facebook",
-    "handle": "@dileepadev",
-    "url": "https://www.facebook.com/dileepadev",
-    "icon": "facebook"
-  },
-  {
-    "name": "Email",
-    "handle": "contact@dileepa.dev",
-    "url": "mailto:contact@dileepa.dev",
-    "icon": "email"
+    "group": "Contact",
+    "links": [
+      {
+        "name": "Email",
+        "handle": "contact@dileepa.dev",
+        "url": "mailto:contact@dileepa.dev",
+        "icon": "email"
+      }
+    ]
   }
 ]

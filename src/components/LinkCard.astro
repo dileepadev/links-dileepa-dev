@@ -11,7 +11,7 @@ const icon = LINK_ICONS[link.icon] ?? "";
 const isExternal = !link.url.startsWith("mailto:");
 ---
 
-<div class="link-card">
+<div class="link-card" data-name={link.name}>
   <a
     href={link.url}
     target={isExternal ? "_blank" : undefined}
@@ -23,25 +23,54 @@ const isExternal = !link.url.startsWith("mailto:");
     <span class="link-card-name">{link.name}</span>
     <span class="link-card-handle">{link.handle}</span>
   </span>
-  <button
-    type="button"
-    class="link-card-copy copy-btn"
-    data-url={link.url}
-    title={`Copy link to ${link.name}`}
-    aria-label={`Copy link to ${link.name}`}
-  >
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-      focusable="false"
+  <div class="link-card-actions">
+    <button
+      type="button"
+      class="link-card-action link-card-qr"
+      title={`Show QR code for ${link.name}`}
+      aria-label={`Show QR code for ${link.name}`}
     >
-      <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
-      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
-    </svg>
-  </button>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+        <line x1="14" y1="14" x2="14" y2="14.01"></line>
+        <line x1="17.5" y1="14" x2="17.5" y2="17.5"></line>
+        <line x1="14" y1="17.5" x2="17.5" y2="17.5"></line>
+        <line x1="14" y1="21" x2="17.5" y2="21"></line>
+        <line x1="21" y1="17.5" x2="21" y2="21"></line>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="link-card-action link-card-copy copy-btn"
+      data-url={link.url}
+      title={`Copy link to ${link.name}`}
+      aria-label={`Copy link to ${link.name}`}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+        ></path>
+      </svg>
+    </button>
+  </div>
 </div>

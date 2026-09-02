@@ -93,9 +93,17 @@
   border-radius: inherit;
 }
 
-.link-card-copy {
+/* Copy and QR sit above .link-card-hit in stacking order, same reason. */
+.link-card-actions {
   position: relative;
   z-index: 1;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.link-card-action {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -112,17 +120,17 @@
     color var(--dur) var(--ease);
 }
 
-.link-card-copy:hover {
+.link-card-action:hover {
   background: var(--raised-hover);
   color: var(--fg);
 }
 
-.link-card-copy:focus-visible {
+.link-card-action:focus-visible {
   outline: none;
   box-shadow: 0 0 0 var(--ring-width) var(--ring);
 }
 
-.link-card-copy svg {
+.link-card-action svg {
   width: 16px;
   height: 16px;
 }

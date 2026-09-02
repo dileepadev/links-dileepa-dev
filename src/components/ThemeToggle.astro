@@ -48,12 +48,67 @@ import "../styles/components/theme-toggle.css";
   const STORAGE_KEY = "dileepa-theme";
   const button = document.getElementById("theme-toggle");
 
-  button?.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
+  // The radial spotlight transition, ported from dileepa-dev's
+  // ThemeToggle.tsx: an aperture circle of the target theme expands from
+  // the toggle's own centre across the viewport via the View Transitions
+  // API. Falls back to an instant swap with no delay when the browser
+  // doesn't support it or the visitor prefers reduced motion - same as
+  // the reference.
+  function applyTheme(next: string) {
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem(STORAGE_KEY, next);
-  });
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : "dark";
+
+    const supportsViewTransitions =
+      typeof document !== "undefined" && "startViewTransition" in document;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (!supportsViewTransitions || reducedMotion) {
+      applyTheme(next);
+      return;
+    }
+
+    const rect = button?.getBoundingClientRect();
+    const x = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+    const y = rect ? rect.top + rect.height / 2 : 0;
+
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    const transition = (
+      document as unknown as {
+        startViewTransition: (callback: () => void) => {
+          ready: Promise<void>;
+        };
+      }
+    ).startViewTransition(() => applyTheme(next));
+
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 2000,
+          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+          pseudoElement: "::view-transition-new(root)",
+        } as KeyframeAnimationOptions,
+      );
+    });
+  }
+
+  button?.addEventListener("click", toggleTheme);
 
   const media = window.matchMedia("(prefers-color-scheme: dark)");
   media.addEventListener("change", (e) => {

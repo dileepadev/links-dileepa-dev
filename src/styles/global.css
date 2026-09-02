@@ -116,6 +116,33 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ============================================================
+   RADIAL SPOTLIGHT THEME TRANSITION - matches dileepa-dev exactly.
+   The toggle's script drives the actual circle animation; these rules
+   just stop the View Transitions API's own default cross-fade from
+   fighting it.
+   ============================================================ */
+
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  z-index: 9999;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 @layer brand {
   a {
     color: inherit;
@@ -266,16 +293,23 @@ button:disabled,
    platform - the Person schema's jobTitle, the line under the hero portrait
    on dileepa-dev. It's the name of the role, not running prose, so the
    sentence-case rule (which covers headings, buttons, nav and labels)
-   doesn't apply to it. */
+   doesn't apply to it.
+
+   Set as a mono label rather than small sans body text - the same move the
+   platform makes for `.section-label` and `.hero-status-pill`: a role sits
+   closer to metadata than to prose, and the tracked mono face reads as a
+   tag under the display-weight name instead of a stray, cramped line. */
 .hero-role {
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
   font-size: var(--text-small);
   line-height: var(--lh-small);
+  letter-spacing: var(--track-label);
   color: var(--fg-muted);
 }
 
 .hero-lead {
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
   color: var(--fg-muted);
   max-width: 44ch;
   margin-inline: auto;
@@ -285,12 +319,30 @@ button:disabled,
    LinkCard's own rules live in components/link-card.css; this is just the
    list wrapper. */
 
+.link-group {
+  margin-top: var(--space-10);
+}
+
+.link-group:last-of-type {
+  padding-bottom: var(--space-16);
+}
+
+.link-group-title {
+  margin-bottom: var(--space-3);
+  padding-left: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
 .links {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  margin-top: var(--space-10);
-  padding-bottom: var(--space-16);
 }
 
 /* --- Copy toast ------------------------------------------------------------*/

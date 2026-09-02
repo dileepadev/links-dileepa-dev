@@ -1,7 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import LinkCard from "../components/LinkCard.astro";
-import links from "../data/links.json";
+import QrModal from "../components/QrModal.astro";
+import groups from "../data/links.json";
 
 const title = "Dileepa Bandara | Links";
 const description =
@@ -22,9 +23,20 @@ const description =
     <p class="hero-lead">Building AI systems and the community around them.</p>
   </section>
 
-  <div class="links">
-    {links.map((link) => <LinkCard link={link} />)}
-  </div>
+  {
+    groups.map((group) => (
+      <div class="link-group">
+        <p class="link-group-title">{group.group}</p>
+        <div class="links">
+          {group.links.map((link) => (
+            <LinkCard link={link} />
+          ))}
+        </div>
+      </div>
+    ))
+  }
+
+  <QrModal />
 
   <div id="toast" class="toast" role="status" aria-live="polite">
     <svg
