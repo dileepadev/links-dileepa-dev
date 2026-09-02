@@ -262,6 +262,18 @@ button:disabled,
   letter-spacing: var(--track-tight);
 }
 
+/* "AI Engineer" is title case here, matching every other role *label* on the
+   platform - the Person schema's jobTitle, the line under the hero portrait
+   on dileepa-dev. It's the name of the role, not running prose, so the
+   sentence-case rule (which covers headings, buttons, nav and labels)
+   doesn't apply to it. */
+.hero-role {
+  margin-top: var(--space-1);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  color: var(--fg-muted);
+}
+
 .hero-lead {
   margin-top: var(--space-2);
   color: var(--fg-muted);
