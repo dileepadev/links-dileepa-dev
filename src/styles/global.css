@@ -295,16 +295,15 @@ button:disabled,
    sentence-case rule (which covers headings, buttons, nav and labels)
    doesn't apply to it.
 
-   Set as a mono label rather than small sans body text - the same move the
-   platform makes for `.section-label` and `.hero-status-pill`: a role sits
-   closer to metadata than to prose, and the tracked mono face reads as a
-   tag under the display-weight name instead of a stray, cramped line. */
+   This is dileepa-dev's .hero-role, unchanged: plain sans at --text-small,
+   muted. A mono/tracked treatment was tried here first and reverted - the
+   monospace face's wider, uneven character spacing reads as off-centre
+   under a centred sans heading even though the box itself is centred, and
+   it invented a variant the reference doesn't have. */
 .hero-role {
   margin-top: var(--space-2);
-  font-family: var(--font-mono);
   font-size: var(--text-small);
   line-height: var(--lh-small);
-  letter-spacing: var(--track-label);
   color: var(--fg-muted);
 }
 
