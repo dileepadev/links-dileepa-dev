@@ -29,6 +29,9 @@ Changes are organized into the following categories:
   rendered client-side with `qrcode-generator`
 - The radial spotlight theme transition, ported from `dileepa-dev`'s `ThemeToggle.tsx`, with the
   same instant-swap fallback for unsupported browsers and reduced motion
+- Footer "Source" and version links, matching `dileepa-dev`'s `.footer-meta` treatment
+- `docs/brand-tokens.css` and `docs/brand/` (icons, covers) vendored alongside `DESIGN.md`,
+  `docs/brand-guide.md`, and `docs/design-system.md`, completing the mirrored doc set
 
 ### Changed - v2.0.0
 
@@ -45,6 +48,15 @@ Changes are organized into the following categories:
 - The API-integration question is closed: link data stays static in `links.json`
 - `README.md` trimmed to stack, features, and getting started - brand and design-system detail
   moved to `AGENTS.md`, where the rest of the platform's agent-facing documentation lives
+
+### Fixed - v2.0.0
+
+- The hero role and lead paragraphs no longer drift left of centre above roughly 580px viewport
+  width - the token sheet's `p { max-width: 68ch }` was overriding their centring
+- Restored the space between the last link card and the footer, lost to a
+  `.link-group:last-of-type` selector that never matched (`QrModal` and `#toast` are also
+  `<div>`s after it in the DOM)
+- The Facebook link now points at `facebook.com` rather than `www.facebook.com`
 
 ### Removed - v2.0.0
 
