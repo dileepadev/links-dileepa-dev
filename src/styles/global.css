@@ -332,7 +332,13 @@ button:disabled,
   margin-top: var(--space-10);
 }
 
-.link-group:last-of-type {
+/* Space before the footer. Not `.link-group:last-of-type` - `QrModal` and
+   `#toast` are also `<div>`s and sit after the last group in the DOM, so
+   `:last-of-type` (which matches by tag, not class, and ignores `display`
+   or `hidden`) never resolves to it. Both of those trailing divs are out of
+   flow anyway (`QrModal` is `[hidden]`, `#toast` is `position: fixed`), so
+   `main` genuinely ends after the last group - put the padding there. */
+main {
   padding-bottom: var(--space-16);
 }
 
