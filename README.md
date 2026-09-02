@@ -1,72 +1,68 @@
 # links.dileepa.dev
 
-A small, fast static site that consolidates my social profiles and useful links in one place.
+A small, fast static page consolidating my social profiles and useful links in one place — the
+link people open from a social bio.
 
-## Features ✅
+## Stack
 
-- Minimal, accessible design built with **Astro** and **Tailwind CSS**
-- Social links and quick contact actions
-- SEO-friendly meta tags, Open Graph, Twitter cards, and JSON-LD structured data
-- Lightweight, single-page layout optimized for mobile and desktop
+- **Astro 7** — static site generator, no client-side framework
+- **Tailwind CSS 4** via `@tailwindcss/vite`
+- Vanilla JS for the theme toggle and copy-to-clipboard — there is no UI framework here and there
+  should not be one
 
-## Demo 🌐
+## Brand
 
-Visit: [https://links.dileepa.dev](https://links.dileepa.dev)
+Built against the platform's v2.0.0 design system. Tokens are vendored from
+[`dileepadev/docs/brand/brand-tokens.css`](https://github.com/dileepadev/dileepadev/blob/main/docs/brand/brand-tokens.css)
+into `src/styles/brand-tokens.css` and wired into Tailwind's `@theme` in `src/styles/global.css`.
+The layout, lockup, nav, card and theme-toggle CSS is reproduced from `dileepa-dev`, the
+platform's reference implementation, so this page reads as the same site rather than a
+lookalike of it.
 
-## Technologies 🔧
+The one deliberate local change to the vendored token sheet is documented at the top of
+`src/styles/brand-tokens.css`: the Google Fonts `@import` is invalid inside a CSS `@layer`
+block, so it's removed there and the fonts load through a `<link>` in `Layout.astro` instead.
 
-- Astro (static site generator)
-- Tailwind CSS
-- Vanilla JS for small UI interactions
+The theme toggle persists under `dileepa-theme` in `localStorage` — the same key `dileepa-dev`
+uses — so the choice a visitor makes on one surface follows them to the other.
 
-## Getting Started — Local Development 🚀
+## Data source
 
-### Prerequisites
+**Static, deliberately.** Link data lives in `src/data/links.json` and nowhere else. There is no
+API integration — this was an open decision going into v2.0.0 and it's now closed: the data
+changes about twice a year, so a build-time API call would trade a real failure mode (the build
+breaking because an endpoint is down) for no benefit over a committed JSON file. If that
+cadence changes materially, revisit the FastAPI-resource option recorded in
+`dileepadev/docs/architecture/platform-overview.md`.
 
-- Node.js 18 or later
-- npm, yarn, or pnpm
+Icons are keyed by name in `links.json` (`"icon": "github"`) and resolved against
+`src/icons/link-icons.ts`, which holds the actual SVG markup in one place — not inline in the
+data file, and not a package pulled in to render nine fixed marks.
 
-### Clone & Install
+## Getting started
 
 ```bash
-git clone https://github.com/dileepadev/links-dileepa-dev.git
-cd links-dileepa-dev
 npm install
-```
-
-### Run Dev Server
-
-```bash
 npm run dev
-# or
-pnpm dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view locally.
-
-## Build & Preview 📦
+Opens at whatever port Astro picks (`http://localhost:4321` by default).
 
 ```bash
-npm run build
-npm run preview
+npm run build     # static output to dist/
+npm run preview   # serve the production build locally
+npm run format     # prettier, including .astro files
 ```
 
-Static output will be in the `dist/` directory after `npm run build`.
+## Deployment
 
-## Deployment 📤
+Deploys to GitHub Pages via `.github/workflows/astro.yml`, triggered on push to `main`. The
+`site` in `astro.config.mjs` is `https://links.dileepa.dev` — the domain doesn't move, since it's
+printed on profiles and slides.
 
-This site is a static site and can be deployed to Vercel, Netlify, GitHub Pages, or any static host. The `site` URL can be set via the `SITE` environment variable if needed.
+## Contributing
 
-## Development Notes 💡
-
-- SEO is configured in `src/layouts/Layout.astro` (canonical, OG/Twitter tags, JSON-LD).
-- Links are managed in `src/data/links.json` for easy updates.
-
-## Contributing 🤝
-
-Contributions are welcome — please open an issue or a PR. See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 

@@ -18,14 +18,14 @@ Version numbers follow the structure:
 
 `MAJOR.MINOR.PATCH`
 
-- **MAJOR** – Incompatible API changes or major breaking updates  
-- **MINOR** – Backward-compatible functionality and feature additions  
+- **MAJOR** – Incompatible API changes or major breaking updates
+- **MINOR** – Backward-compatible functionality and feature additions
 - **PATCH** – Backward-compatible bug fixes and small improvements
 
 ### Examples
 
-- `1.0.0` – First stable release  
-- `1.1.0` – Adds a new endpoint or feature  
+- `1.0.0` – First stable release
+- `1.1.0` – Adds a new endpoint or feature
 - `1.1.1` – Fixes a bug or makes a minor improvement
 
 ## Release Process
@@ -35,7 +35,7 @@ All notable changes are documented in the [CHANGELOG.md](CHANGELOG.md) file.
 ### Typical Steps
 
 1. Complete all features and fixes planned for the release
-2. Update the `CHANGELOG.md` with categorized entries:  
+2. Update the `CHANGELOG.md` with categorized entries:
    - **Added**, **Changed**, **Fixed**, **Removed**
 3. Bump the version number in `package.json` (and `package-lock.json` if needed)
 4. Commit changes with a version-related message (e.g. `chore: release v1.2.0`)
@@ -44,7 +44,7 @@ All notable changes are documented in the [CHANGELOG.md](CHANGELOG.md) file.
    ```bash
    git tag v1.2.0
    git push origin v1.2.0
-    ````
+   ```
 
 6. (Optional) Create a GitHub release and paste the relevant changelog section
 

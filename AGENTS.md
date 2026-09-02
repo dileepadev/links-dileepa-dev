@@ -16,42 +16,34 @@ Pages.
 Smallest surface of the seven repositories, and the most exposed: it is the link people open
 from a social bio, so inconsistent branding here undercuts the rebrand everywhere else.
 
-v2.0.0 applies the new design system, upgrades Astro across two majors, and closes the open
-question about whether link data should come from the API.
+v2.0.0 applied the new design system, upgraded Astro across two majors, and closed the open
+question about whether link data should come from the API (static, see Gotchas).
 
-Currently on branch `feat/v2.0.0`. Version `1.0.0`; the target is `2.0.0`.
-
-[TODO.md](TODO.md) holds this repo's slice. Issue **#2** holds the full scope. The
-cross-repository roadmap lives in `dileepadev/TODO.md`.
+Version `2.0.0`, shipped. [TODO.md](TODO.md) holds this repo's slice. Issue **#2** holds the
+full scope. The cross-repository roadmap lives in `dileepadev/TODO.md`.
 
 ## Layout
 
-| Path | Status |
-| --- | --- |
-| `src/pages/index.astro` | **Built.** The whole site — one page |
-| `src/pages/404.astro` | **Built.** |
-| `src/layouts/Layout.astro` | **Built.** SEO: canonical, Open Graph, Twitter cards, JSON-LD |
-| `src/components/LinkCard.astro` | **Built.** The one real component |
-| `src/components/ThemeToggle.astro` | **Built.** |
-| `src/components/Welcome.astro` | **Probably Astro starter scaffolding.** Confirm before deleting |
-| `src/data/links.json` | **Built.** Name, handle, url, and an inline SVG string per entry |
-| `src/styles/` | **Built.** `global.css` plus per-component CSS |
-| `public/images/` | **Built.** banner, favicon, placeholder, profile |
+| Path                               | Status                                                              |
+| ---------------------------------- | ------------------------------------------------------------------- |
+| `src/pages/index.astro`            | **Built.** The whole site — one page                                |
+| `src/pages/404.astro`              | **Built.**                                                          |
+| `src/layouts/Layout.astro`         | **Built.** SEO: canonical, Open Graph, Twitter cards, JSON-LD       |
+| `src/components/LinkCard.astro`    | **Built.** The one real component                                   |
+| `src/components/ThemeToggle.astro` | **Built.**                                                          |
+| `src/data/links.json`              | **Built.** Name, handle, url, and an icon key per entry             |
+| `src/icons/link-icons.ts`          | **Built.** SVG markup keyed by `links.json`'s `icon` field          |
+| `src/styles/`                      | **Built.** `global.css`, `brand-tokens.css`, plus per-component CSS |
+| `public/images/`                   | **Built.** portrait; favicon set and `og.png` at `public/` root     |
 
 ## Toolchain
 
-- Node 18+ and npm. `npm install`, then `npm run dev`.
-- `npm run build` · `npm run preview`. Static output in `dist/`.
-- Astro 5.17 + Tailwind CSS 4 via `@tailwindcss/vite`. Vanilla JS for small interactions —
-  there is no UI framework here and there should not be one.
+- Node 22.12+ (Astro 6+'s minimum) and npm. `npm install`, then `npm run dev`.
+- `npm run build` · `npm run preview` · `npm run format` (Prettier, including `.astro`). Static
+  output in `dist/`.
+- Astro 7 + Tailwind CSS 4 via `@tailwindcss/vite`. Vanilla JS for small interactions — there is
+  no UI framework here and there should not be one.
 - Deploys to GitHub Pages via `.github/workflows/astro.yml`.
-
-Target versions for v2.0.0: Astro **7.x**, Tailwind **4.3.x**.
-
-> [!IMPORTANT]
-> Astro 5 → 7 crosses **two majors**. Config, content collections, and integration APIs all
-> changed. Read both upgrade guides, and do the upgrade as its **own commit, before the
-> rebrand**, so a build break is easy to attribute.
 
 ## Coding standards
 
@@ -60,7 +52,7 @@ Target versions for v2.0.0: Astro **7.x**, Tailwind **4.3.x**.
   renders a list of links.
 - Styles live in `src/styles/` — `global.css` for tokens and base, `components/*.css` per
   component. Keep that split.
-- Comments explain *why*, not *what*.
+- Comments explain _why_, not _what_.
 - Link data belongs in `src/data/links.json`, never inline in a template.
 
 ## Brand rules — v2.0.0
@@ -81,7 +73,10 @@ and wired into Tailwind 4's `@theme`. Never re-declare values.
   tint every one is exactly what the rule exists to prevent.
 - `LinkCard` matches the platform card contract: same radius, hairline border, surface colour,
   hover treatment, and focus ring as `dileepa.dev`.
-- Portrait background is `ink-800` `#161616`, per the guide.
+- The favicon is the portrait, at every size — brand-guide.md §3.2 — matching `dileepa-dev`
+  rather than the reduced `/.` mark, which stays reserved for in-product square placements.
+- Portrait background is `--ink-800` (the token, not a literal hex — it moved between guide
+  revisions and will again).
 - No hard-coded hex.
 
 `dileepa-dev` is the reference implementation. Match it rather than designing independently.
@@ -98,8 +93,8 @@ There is no test suite. Before calling a change done:
 
 ## Docs
 
-- `README.md` currently describes SEO config and the data file. Keep it accurate through the
-  upgrade, and record the API-integration decision there once it is made.
+- `README.md` describes the stack, brand alignment, and the data-source decision. Keep it
+  accurate.
 - `CHANGELOG.md` gets categorised entries at release time.
 
 ## Git workflow
@@ -113,28 +108,29 @@ There is no test suite. Before calling a change done:
 
 ## Secrets
 
-None. This is a fully static site with no API calls and no credentials. `SITE` is the only
-environment variable, and it is not secret.
-
-If the API-integration option is taken, a build-time key would be the first secret this repo
-has ever held — treat that as a decision, not a detail.
+None. This is a fully static site with no API calls and no credentials. `site` in
+`astro.config.mjs` is `https://links.dileepa.dev`, and it is not secret.
 
 ## Gotchas
 
-- **There is no API integration.** Not "minimal" — none. `links.json` is the only data source.
-  The platform plan's "review its API integration" refers to something that does not exist.
-  The decision is: keep it static (recommended — the data changes about twice a year) or add a
-  `/links` resource plus an admin screen plus a rebuild trigger.
-- **The Blog entry points at `blog.dileepa.dev`, and nothing will catch it.** That host is being
-  **retired rather than redirected** — there is no 301 layer, so once it is switched off this is a
-  dead link on the page most likely to be shared. Point `url` *and* the displayed `handle` at
-  `dileepa.dev/blog`. Safe to do now: the new URL already serves all 18 posts. Tracked in
-  [#3](https://github.com/dileepadev/links-dileepa-dev/issues/3).
-- **Inline SVG strings live inside `links.json`.** They bypass any icon system and are painful
-  to maintain. Move them to `astro-icon` or a local sprite.
-- **`Welcome.astro` and `welcome.css` look like starter scaffolding.** Confirm they are unused
-  before deleting — do not assume.
-- **`links.dileepa.dev` is printed on profiles and slides.** The domain does not move, and no
-  existing link may be dropped during the redesign.
-- **Good canary for the design system.** It is the only non-Next.js frontend, so shipping it
-  early proves the tokens work outside a Next build.
+- **There is no API integration, by decision.** `links.json` is the only data source, and that's
+  final for v2.0.0 — not a placeholder. The data changes about twice a year, so a build-time API
+  call would trade a real failure mode (the build breaking because an endpoint is down) for no
+  benefit over a committed file. Revisit only if that cadence changes materially; the
+  alternative (a `/links` FastAPI resource, an admin screen, a rebuild trigger) is recorded in
+  `dileepadev/docs/architecture/platform-overview.md` if it's ever needed.
+- **The Blog entry now points at `dileepa.dev/blog`,** not `blog.dileepa.dev` — that host is
+  retired rather than redirected, so this had to move before the old host went away. Both `url`
+  and the displayed `handle` were updated. Closed [#3](https://github.com/dileepadev/links-dileepa-dev/issues/3).
+- **Icons are keyed, not inlined.** `links.json` holds an `icon` string per entry; the actual SVG
+  markup lives in `src/icons/link-icons.ts`, keyed the same way. Add a new link by adding both an
+  entry and, if the icon doesn't already exist, a key in that file.
+- **`links.dileepa.dev` does not move.** It's printed on profiles and slides. Every entry that
+  resolved before v2.0.0 still resolves — none were dropped in the redesign.
+- **The `<a>` in `.link-card-hit` is the card's real click target, not the whole `.link-card`
+  div.** A `<button>` (the copy button) can't legally nest inside an `<a>` in HTML, so the card
+  is a `div` with an absolutely-positioned overlay link underneath the button, and `:has()`
+  drives the card's hover/focus visuals off that inner link.
+- **One theme storage key across the platform:** `dileepa-theme`, keyed off `data-theme` on
+  `<html>` — not the `.dark`/`.light` class the v1 page used. Matches `dileepa-dev` exactly, so
+  a visitor's choice follows them between the two.

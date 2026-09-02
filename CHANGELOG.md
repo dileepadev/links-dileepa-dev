@@ -13,6 +13,38 @@ Changes are organized into the following categories:
 
 - Changes for the next release are available in development branches.
 
+## [v2.0.0] - 2026-09-02
+
+### Added - v2.0.0
+
+- `@astrojs/sitemap`, generating `sitemap-index.xml`
+- `robots.txt`
+- Prettier with the Astro plugin
+- Person and WebSite JSON-LD, matching the shape `dileepa-dev` builds
+- `src/icons/link-icons.ts` — a maintainable icon set keyed by name, replacing inline SVG
+  strings in the data file
+
+### Changed - v2.0.0
+
+- Astro 5.17.1 → 7.2.10, done as its own commit ahead of the rebrand
+- Tailwind CSS 4.1.x → 4.3.x
+- Full rebrand against the v2.0.0 design system: brand tokens vendored from
+  `dileepadev/docs/brand/brand-tokens.css`, Manrope + JetBrains Mono at weights 400/500/700,
+  emerald as the only accent, the platform's lockup, nav, card and theme-toggle treatment
+- `src/data/links.json` — inline SVG strings replaced with icon keys; the Blog entry repointed
+  from `blog.dileepa.dev` to `dileepa.dev/blog` ahead of the blog's decommission (#3)
+- Theme toggle now persists under the shared `dileepa-theme` storage key and keys off
+  `data-theme`, matching every other platform surface
+- The API-integration question is closed: link data stays static in `links.json` — see the
+  README's Data source section
+
+### Removed - v2.0.0
+
+- `src/components/Welcome.astro` and `src/styles/components/welcome.css` — unused Astro
+  starter scaffolding
+- Microsoft Clarity and Google Analytics tags
+- v1 brand assets: navy/silver palette, Inter font, the old profile and banner images
+
 ## [v1.0.0] - 2026-03-08
 
 ### Added - v1.0.0
@@ -58,4 +90,5 @@ Changes are organized into the following categories:
 <!-- v0.0.1 -->
 
 [Unreleased]: https://github.com/dileepadev/links-dileepa-dev/branches
+[v2.0.0]: https://github.com/dileepadev/links-dileepa-dev/releases/tag/v2.0.0
 [v1.0.0]: https://github.com/dileepadev/links-dileepa-dev/releases/tag/v1.0.0
