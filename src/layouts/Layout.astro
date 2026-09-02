@@ -3,6 +3,7 @@ import "../styles/global.css";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import pkg from "../../package.json";
 import links from "../data/links.json";
+import { LINK_ICONS } from "../icons/link-icons";
 
 interface Props {
   title?: string;
@@ -23,6 +24,12 @@ const ogImage = new URL("/og.png", site).href;
 const sameAs = links
   .filter((l) => l.url && !l.url.startsWith("mailto:"))
   .map((l) => l.url);
+
+// The footer's two source links, mirroring dileepa-dev's footer-meta: the
+// repository, and the branch this build came from. package.json's
+// `repository.url` carries npm's `.git` suffix, which is not a browsable URL.
+const repoUrl = pkg.repository.url.replace(/\.git$/, "");
+const repoBranch = "feat/v2.0.0";
 
 const personId = new URL("/#person", site).href;
 const websiteId = new URL("/#website", site).href;
@@ -171,13 +178,41 @@ const jsonLd = [
     <footer class="site-footer">
       <div class="container footer-inner">
         <p>&copy; {new Date().getFullYear()} Dileepa Bandara</p>
-        <a
-          href="https://github.com/dileepadev/links-dileepa-dev"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View source (v{pkg.version})
-        </a>
+        <div class="footer-meta">
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View source on GitHub"
+          >
+            <Fragment set:html={LINK_ICONS.github} />
+            <span>Source</span>
+          </a>
+          <span class="footer-sep" aria-hidden="true">/</span>
+          <a
+            href={`${repoUrl}/tree/${repoBranch}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`View branch ${repoBranch} on GitHub`}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <line x1="6" x2="6" y1="3" y2="15"></line>
+              <circle cx="18" cy="6" r="3"></circle>
+              <circle cx="6" cy="18" r="3"></circle>
+              <path d="M18 9a9 9 0 0 1-9 9"></path>
+            </svg>
+            <span>v{pkg.version}</span>
+          </a>
+        </div>
       </div>
     </footer>
   </body>
