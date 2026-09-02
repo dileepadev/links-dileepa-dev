@@ -21,8 +21,14 @@ Changes are organized into the following categories:
 - `robots.txt`
 - Prettier with the Astro plugin
 - Person and WebSite JSON-LD, matching the shape `dileepa-dev` builds
-- `src/icons/link-icons.ts` — a maintainable icon set keyed by name, replacing inline SVG
+- `src/icons/link-icons.ts` - a maintainable icon set keyed by name, replacing inline SVG
   strings in the data file
+- The "AI Engineer" role label under the hero name
+- Links grouped by category (Site, Social, Contact) in `links.json`
+- A QR code action on every link card: click to see the link as a scannable code in a modal,
+  rendered client-side with `qrcode-generator`
+- The radial spotlight theme transition, ported from `dileepa-dev`'s `ThemeToggle.tsx`, with the
+  same instant-swap fallback for unsupported browsers and reduced motion
 
 ### Changed - v2.0.0
 
@@ -31,19 +37,22 @@ Changes are organized into the following categories:
 - Full rebrand against the v2.0.0 design system: brand tokens vendored from
   `dileepadev/docs/brand/brand-tokens.css`, Manrope + JetBrains Mono at weights 400/500/700,
   emerald as the only accent, the platform's lockup, nav, card and theme-toggle treatment
-- `src/data/links.json` — inline SVG strings replaced with icon keys; the Blog entry repointed
-  from `blog.dileepa.dev` to `dileepa.dev/blog` ahead of the blog's decommission (#3)
+- `src/data/links.json` - inline SVG strings replaced with icon keys; the Blog entry repointed
+  from `blog.dileepa.dev` to `dileepa.dev/blog` ahead of the blog's decommission (#3); restructured
+  into named groups instead of one flat list
 - Theme toggle now persists under the shared `dileepa-theme` storage key and keys off
   `data-theme`, matching every other platform surface
-- The API-integration question is closed: link data stays static in `links.json` — see the
-  README's Data source section
+- The API-integration question is closed: link data stays static in `links.json`
+- `README.md` trimmed to stack, features, and getting started - brand and design-system detail
+  moved to `AGENTS.md`, where the rest of the platform's agent-facing documentation lives
 
 ### Removed - v2.0.0
 
-- `src/components/Welcome.astro` and `src/styles/components/welcome.css` — unused Astro
+- `src/components/Welcome.astro` and `src/styles/components/welcome.css` - unused Astro
   starter scaffolding
 - Microsoft Clarity and Google Analytics tags
 - v1 brand assets: navy/silver palette, Inter font, the old profile and banner images
+- `public/images/favicon.ico`, an unreferenced duplicate of `public/favicon.ico`
 
 ## [v1.0.0] - 2026-03-08
 
