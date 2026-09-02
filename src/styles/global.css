@@ -270,6 +270,16 @@ button:disabled,
   text-align: center;
 }
 
+/* The token sheet caps every `<p>` at `max-width: 68ch` as a measure limit
+   for running prose. In a centred column that cap quietly turns into a
+   left-aligned box as soon as the viewport is wider than it: the text
+   centres inside its own 68ch box, and the box itself sits flush left. The
+   cap is about 580px at --text-small, which is why the hero looked right on
+   a phone and drifted left on a desktop. Centre the box, not just the text. */
+.hero p {
+  margin-inline: auto;
+}
+
 .portrait {
   width: 96px;
   height: 96px;
@@ -307,11 +317,11 @@ button:disabled,
   color: var(--fg-muted);
 }
 
+/* A tighter measure than the sheet's 68ch default; `.hero p` centres it. */
 .hero-lead {
   margin-top: var(--space-3);
   color: var(--fg-muted);
   max-width: 44ch;
-  margin-inline: auto;
 }
 
 /* --- Links list ------------------------------------------------------------

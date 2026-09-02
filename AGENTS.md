@@ -139,6 +139,12 @@ None. This is a fully static site with no API calls and no credentials. `site` i
 - **Icons are keyed, not inlined.** `links.json` holds an `icon` string per entry; the actual SVG
   markup lives in `src/icons/link-icons.ts`, keyed the same way. Add a new link by adding both an
   entry and, if the icon doesn't already exist, a key in that file.
+- **The token sheet caps every `<p>` at `max-width: 68ch`,** which centred text does not survive
+  on its own. `text-align: center` centres the text inside that 68ch box, but the box is still a
+  block that sits flush left, so anything centred needs `margin-inline: auto` as well. The cap is
+  roughly 580px at `--text-small`, so a hero looks correct on a phone and drifts left on a
+  desktop - the failure mode is invisible at the width most of this page is checked at. `.hero p`
+  carries the `auto` for the whole hero.
 - **`links.dileepa.dev` does not move.** It's printed on profiles and slides. Every entry that
   resolved before v2.0.0 still resolves - none were dropped in the redesign.
 - **The `<a>` in `.link-card-hit` is the card's real click target, not the whole `.link-card`
