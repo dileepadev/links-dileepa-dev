@@ -1,90 +1,76 @@
 ---
 import "../styles/components/link-card.css";
+import { LINK_ICONS } from "../icons/link-icons";
 
 interface Props {
-  link: { name: string; handle: string; url: string; svg: string };
-  index?: number;
+  link: { name: string; handle: string; url: string; icon: string };
 }
-const { link, index = 0 } = Astro.props as Props;
-const urlEsc = JSON.stringify(link.url);
+
+const { link } = Astro.props as Props;
+const icon = LINK_ICONS[link.icon] ?? "";
+const isExternal = !link.url.startsWith("mailto:");
 ---
 
-<div
-  class="group relative flex items-center p-4 rounded-xl bg-bg-secondary border border-border-light hover:border-accent-blue hover:bg-bg-tertiary transition-all duration-300 shadow-sm hover:shadow-md animate-slide-up"
-  style={`animation-delay: ${index * 80}ms`}
->
-  <!-- Social Icon -->
-  <div
-    class="w-12 h-12 flex items-center justify-center rounded-lg bg-bg-primary text-accent-blue shadow-inner group-hover:scale-110 transition-transform duration-300"
-    set:html={link.svg}
-  />
-
-  <!-- Content -->
-  <div class="ml-4 grow min-w-0">
-    <h2
-      class="text-lg font-bold text-text-primary group-hover:text-accent-blue transition-colors truncate"
-    >
-      {link.name}
-    </h2>
-    <p class="text-sm text-text-muted truncate">{link.handle}</p>
-  </div>
-
-  <!-- Actions -->
-  <div
-    class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
-  >
-    <button
-      class="copy-btn p-2 rounded-lg bg-bg-primary text-text-muted hover:text-accent-blue hover:bg-accent-blue/10 transition-transform transform hover:scale-105"
-      title="Copy Link"
-      aria-label={`Copy link to ${link.name}`}
-      onclick={`(async (e) => { e.preventDefault(); e.stopPropagation(); try { await navigator.clipboard.writeText(${urlEsc}); const s = document.getElementById('status-msg'); if (s) { s.classList.remove('opacity-0'); setTimeout(() => s.classList.add('opacity-0'), 2000); } } catch (err) { console.error('Failed to copy', err); } })(event)`}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path
-          d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
-        ></path></svg
-      >
-    </button>
-
-    <a
-      href={link.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="p-2 rounded-lg bg-bg-primary text-text-muted hover:text-accent-blue hover:bg-accent-blue/10 transition-transform transform hover:scale-105"
-      title={`Open ${link.name}`}
-      aria-label={`Open ${link.name} in new tab`}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        ><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path
-          d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-        ></path></svg
-      >
-    </a>
-  </div>
-
-  <!-- Mobile Link Overlay -->
+<div class="link-card" data-name={link.name}>
   <a
     href={link.url}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="absolute inset-0 z-0 sm:hidden"
+    target={isExternal ? "_blank" : undefined}
+    rel={isExternal ? "noopener noreferrer" : undefined}
+    class="link-card-hit"
     aria-label={link.name}></a>
+  <span class="link-card-icon" set:html={icon} />
+  <span class="link-card-body">
+    <span class="link-card-name">{link.name}</span>
+    <span class="link-card-handle">{link.handle}</span>
+  </span>
+  <div class="link-card-actions">
+    <button
+      type="button"
+      class="link-card-action link-card-qr"
+      title={`Show QR code for ${link.name}`}
+      aria-label={`Show QR code for ${link.name}`}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+        <line x1="14" y1="14" x2="14" y2="14.01"></line>
+        <line x1="17.5" y1="14" x2="17.5" y2="17.5"></line>
+        <line x1="14" y1="17.5" x2="17.5" y2="17.5"></line>
+        <line x1="14" y1="21" x2="17.5" y2="21"></line>
+        <line x1="21" y1="17.5" x2="21" y2="21"></line>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="link-card-action link-card-copy copy-btn"
+      data-url={link.url}
+      title={`Copy link to ${link.name}`}
+      aria-label={`Copy link to ${link.name}`}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+        ></path>
+      </svg>
+    </button>
+  </div>
 </div>

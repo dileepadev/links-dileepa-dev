@@ -1,73 +1,45 @@
 # links.dileepa.dev
 
-A small, fast static site that consolidates my social profiles and useful links in one place.
+A small, fast static page consolidating my social profiles and useful links in one place, the
+link people open from a social bio.
 
-## Features ✅
+## Stack
 
-- Minimal, accessible design built with **Astro** and **Tailwind CSS**
-- Social links and quick contact actions
-- SEO-friendly meta tags, Open Graph, Twitter cards, and JSON-LD structured data
-- Lightweight, single-page layout optimized for mobile and desktop
+- Astro 7, no client-side framework
+- Tailwind CSS 4 via `@tailwindcss/vite`
+- Vanilla JS for the theme toggle, copy-to-clipboard, and the QR code modal
 
-## Demo 🌐
+## Features
 
-Visit: [https://links.dileepa.dev](https://links.dileepa.dev)
+- Links grouped by category (Site, Social, Contact) in `src/data/links.json`
+- Click the QR icon on any link to see it as a scannable code
+- Copy any link to the clipboard with one click
+- Dark and light themes, synced with `dileepa.dev` via a shared storage key
+- No API calls. Link data is a static file, updated by editing `links.json` directly
 
-## Technologies 🔧
-
-- Astro (static site generator)
-- Tailwind CSS
-- Vanilla JS for small UI interactions
-
-## Getting Started — Local Development 🚀
-
-### Prerequisites
-
-- Node.js 18 or later
-- npm, yarn, or pnpm
-
-### Clone & Install
+## Getting started
 
 ```bash
-git clone https://github.com/dileepadev/links-dileepa-dev.git
-cd links-dileepa-dev
 npm install
-```
-
-### Run Dev Server
-
-```bash
 npm run dev
-# or
-pnpm dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view locally.
-
-## Build & Preview 📦
+Opens at `http://localhost:4321` by default.
 
 ```bash
-npm run build
-npm run preview
+npm run build     # static output to dist/
+npm run preview   # serve the production build locally
+npm run format     # prettier, including .astro files
 ```
 
-Static output will be in the `dist/` directory after `npm run build`.
+## Deployment
 
-## Deployment 📤
+Deploys to GitHub Pages via `.github/workflows/astro.yml`, triggered on push to `main`.
 
-This site is a static site and can be deployed to Vercel, Netlify, GitHub Pages, or any static host. The `site` URL can be set via the `SITE` environment variable if needed.
+## Contributing
 
-## Development Notes 💡
-
-- SEO is configured in `src/layouts/Layout.astro` (canonical, OG/Twitter tags, JSON-LD).
-- Links are managed in `src/data/links.json` for easy updates.
-
-## Contributing 🤝
-
-Contributions are welcome — please open an issue or a PR. See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
-MIT © Dileepa Bandara
+MIT, Dileepa Bandara

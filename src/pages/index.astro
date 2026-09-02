@@ -1,12 +1,81 @@
 ---
-import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
+import LinkCard from "../components/LinkCard.astro";
+import QrModal from "../components/QrModal.astro";
+import groups from "../data/links.json";
 
-const title = "Links | Dileepa Bandara";
+const title = "Dileepa Bandara | Links";
 const description =
-  "A curated list of links to my website, socials, and projects. Connect with me and find resources.";
+  "Building AI systems and the community around them. Find my socials and other links below.";
 ---
 
 <Layout title={title} description={description}>
-  <Welcome />
+  <section class="hero">
+    <img
+      src="/images/profile.webp"
+      width="96"
+      height="96"
+      alt="Dileepa Bandara"
+      class="portrait"
+    />
+    <h1 class="hero-name">Dileepa Bandara</h1>
+    <p class="hero-role">AI Engineer</p>
+    <p class="hero-lead">Building AI systems and the community around them.</p>
+  </section>
+
+  {
+    groups.map((group) => (
+      <div class="link-group">
+        <p class="link-group-title">{group.group}</p>
+        <div class="links">
+          {group.links.map((link) => (
+            <LinkCard link={link} />
+          ))}
+        </div>
+      </div>
+    ))
+  }
+
+  <QrModal />
+
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    Copied to clipboard
+  </div>
 </Layout>
+
+<script>
+  const toast = document.getElementById("toast");
+  let hideTimer: ReturnType<typeof setTimeout> | undefined;
+
+  document.querySelectorAll<HTMLButtonElement>(".copy-btn").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const url = btn.dataset.url;
+      if (!url) return;
+      try {
+        await navigator.clipboard.writeText(url);
+        toast?.classList.add("is-visible");
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(
+          () => toast?.classList.remove("is-visible"),
+          1800,
+        );
+      } catch (err) {
+        console.error("Failed to copy link", err);
+      }
+    });
+  });
+</script>

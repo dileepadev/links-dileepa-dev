@@ -1,156 +1,74 @@
+/* The cascade order, declared before anything else so this is the order that
+   holds - a layer's position is fixed by where it is first named. `brand`
+   sits between Tailwind's `base` and `components`, matching dileepa-dev: the
+   token sheet is a base layer that has to lose to a utility. */
+@layer theme, base, brand, components, utilities;
+
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* ============================================
-   DESIGN SYSTEM - dileepa.dev
-   Brand Color: #030a14 (Deep Navy)
-   ============================================ */
+/* The vendored canonical token sheet - dileepadev/docs/brand/brand-tokens.css.
+   Every colour, type step, space and motion value in this app resolves
+   through it. Never declare a colour here or in a component. */
+@import "./brand-tokens.css" layer(brand);
 
-/* CSS Custom Properties - Light Mode (Default) */
-:root {
-  /* Brand Colors (deep blue only) */
-  --brand-primary: #030a14; /* primary deep navy */
-  --brand-primary-light: #030a14; /* keep same — avoid other color variants */
-  --brand-primary-dark: #010204; /* deeper blue for dark mode accents */
-
-  /* Accent Colors (silver — matches primary palette) */
-  --accent-blue: #475569; /* slate-600 — cool silver */
-  --accent-blue-light: rgba(71, 85, 105, 0.12);
-  --accent-blue-dark: #334155;
-  /* Text on accent background (for contrast) */
-  --text-on-accent: #ffffff;
-
-  /* Background Colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --bg-elevated: #ffffff;
-
-  /* Text Colors */
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #64748b;
-  --text-muted: #94a3b8;
-  --text-inverse: #ffffff;
-
-  /* Border Colors */
-  --border-light: #e2e8f0;
-  --border-medium: #cbd5e1;
-  --border-dark: #94a3b8;
-
-  /* Shadow Colors */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl:
-    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-
-  /* Typography */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: ui-monospace, monospace;
-
-  /* Spacing Scale */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  --space-3xl: 4rem;
-  --space-4xl: 6rem;
-
-  /* Border Radius */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-full: 9999px;
-
-  /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Z-Index Scale */
-  --z-dropdown: 50;
-  --z-sticky: 100;
-  --z-fixed: 150;
-  --z-modal: 200;
-  --z-tooltip: 250;
-}
-
-/* Dark Mode */
-.dark {
-  --brand-primary: #030a14;
-  --brand-primary-light: #030a14;
-  --brand-primary-dark: #010204;
-
-  /* Accent - Silver on dark backgrounds */
-  --accent-blue: #cbd5e1; /* slate-300 — bright silver */
-  --accent-blue-light: rgba(203, 213, 225, 0.15);
-  --accent-blue-dark: #94a3b8;
-  /* Dark text on silver for readability */
-  --text-on-accent: #0f172a;
-
-  /* Deep-blue backgrounds */
-  --bg-primary: #010204; /* very deep blue background */
-  --bg-secondary: #030a14; /* primary brand as secondary layer */
-  --bg-tertiary: #06121a; /* slightly lighter than secondary for hover/cards */
-  --bg-elevated: #030a14;
-
-  --text-primary: #f8fafc;
-  --text-secondary: #e2e8f0;
-  --text-tertiary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-inverse: #010204;
-
-  /* Borders - Visible slate blues */
-  --border-light: #1e293b;
-  --border-medium: #334155;
-  --border-dark: #475569;
-
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-  --shadow-md:
-    0 4px 6px -1px rgb(0 0 0 / 0.45), 0 2px 4px -2px rgb(0 0 0 / 0.35);
-  --shadow-lg:
-    0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-  --shadow-xl:
-    0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.45);
-}
-
-/* Tailwind Theme Integration */
+/* ============================================================
+   Tailwind theme - the semantic tokens, and only those.
+   ============================================================ */
 @theme inline {
-  --color-brand-primary: var(--brand-primary);
-  --color-brand-light: var(--brand-primary-light);
-  --color-brand-dark: var(--brand-primary-dark);
+  --color-bg: var(--bg);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-raised: var(--bg-raised);
+  --color-surface-hover: var(--surface-hover);
+  --color-border-hairline: var(--border);
+  --color-border-strong: var(--border-strong);
 
-  --color-accent-blue: var(--accent-blue);
-  --color-on-accent: var(--text-on-accent);
-  /* other accents intentionally unified to brand */
-  --color-accent-purple: var(--accent-blue);
-  --color-accent-teal: var(--accent-blue);
-  --color-accent-orange: var(--accent-blue);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
 
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-tertiary: var(--bg-tertiary);
-  --color-bg-elevated: var(--bg-elevated);
+  --color-brand: var(--brand);
+  --color-brand-fill: var(--brand-fill);
+  --color-on-brand: var(--on-brand);
 
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-tertiary: var(--text-tertiary);
-  --color-text-muted: var(--text-muted);
-
-  --color-border-light: var(--border-light);
-  --color-border-medium: var(--border-medium);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
+
+  --text-display: var(--text-display);
+  --text-display--line-height: var(--lh-display);
+  --text-h1: var(--text-h1);
+  --text-h1--line-height: var(--lh-h1);
+  --text-h2: var(--text-h2);
+  --text-h2--line-height: var(--lh-h2);
+  --text-h3: var(--text-h3);
+  --text-h3--line-height: var(--lh-h3);
+  --text-body: var(--text-body);
+  --text-body--line-height: var(--lh-body);
+  --text-small: var(--text-small);
+  --text-small--line-height: var(--lh-small);
+  --text-label: var(--text-label);
+  --text-label--line-height: var(--lh-label);
+
+  --radius-sm: var(--radius-sm);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --ease-brand: var(--ease);
 }
 
-/* Base Styles */
+/* Tailwind 4 keeps bare `rounded` as a 0.25rem legacy alias and does not read
+   it from the theme, so every `rounded` in the app was drawing 4px against a
+   token that says 8px. */
+@utility rounded {
+  border-radius: var(--radius);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
 *,
 *::before,
 *::after {
@@ -159,364 +77,408 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem; /* clear fixed navbar (top-5 + h-16) */
+  -webkit-text-size-adjust: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) var(--bg);
 }
 
-body {
-  font-family: var(--font-sans);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Focus Styles */
-:focus-visible {
-  outline: 2px solid var(--brand-primary);
-  outline-offset: 2px;
-}
-
-/* Themed form controls (inputs, selects, textareas) */
-input[type="search"],
-select,
-textarea {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-light);
-  /* leave left padding to utility classes (e.g., pl-16/pl-20) so icon spacing works */
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  padding-right: 0.75rem;
-  border-radius: var(--radius-md);
-  transition:
-    box-shadow var(--transition-fast),
-    border-color var(--transition-fast),
-    background-color var(--transition-fast);
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  font-family: inherit;
-  font-size: 0.95rem;
-}
-
-/* Add a chevron arrow to selects and room for it */
-select {
-  padding-right: 2.25rem; /* space for arrow */
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1rem;
-  /* light-mode arrow */
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
-}
-
-/* Dark mode overrides for form controls */
-.dark input[type="search"],
-.dark select,
-.dark textarea {
-  background-color: var(--bg-elevated);
-  color: var(--text-primary);
-  border: 1px solid var(--border-medium);
-}
-.dark select {
-  /* dark-mode arrow (lighter color) */
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
-}
-
-/* Focus state for form controls */
-input[type="search"]:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--accent-blue-light);
-  border-color: var(--accent-blue);
-}
-
-/* Selection */
-::selection {
-  background-color: var(--brand-primary);
-  color: white;
-}
-::-moz-selection {
-  background-color: var(--brand-primary);
-  color: white;
-}
-
-/* Dark mode: swap selection colors for better contrast */
-html.dark ::selection,
-.dark ::selection {
-  background-color: var(--accent-blue);
-  color: var(--text-on-accent);
-}
-html.dark ::-moz-selection,
-.dark ::-moz-selection {
-  background-color: var(--accent-blue);
-  color: var(--text-on-accent);
-}
-
-/* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-medium);
-  border-radius: var(--radius-full);
+  background: var(--border);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--bg);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-dark);
+  background: var(--fg-muted);
 }
 
-/* Theme Toggle Icons */
-#theme-toggle-dark-icon,
-#theme-toggle-light-icon {
-  display: none;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
-html.dark #theme-toggle-dark-icon {
-  display: block;
+body {
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-html.light #theme-toggle-light-icon {
-  display: block;
+/* ============================================================
+   RADIAL SPOTLIGHT THEME TRANSITION - matches dileepa-dev exactly.
+   The toggle's script drives the actual circle animation; these rules
+   just stop the View Transitions API's own default cross-fade from
+   fighting it.
+   ============================================================ */
+
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  z-index: 1;
 }
 
-/* Utility Classes */
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  z-index: 9999;
 }
 
-.dark .glass {
-  background: rgba(3, 10, 20, 0.8);
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
-/* Cursor for interactive elements */
-/* Ensure obvious pointer for clickable controls across the site */
+@layer brand {
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+
+  h1,
+  h2,
+  .display {
+    letter-spacing: var(--track-tight);
+  }
+
+  h2 {
+    font-weight: 700;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
 a,
 button,
-select,
-input[type="button"],
-input[type="submit"],
-input[type="reset"],
 [role="button"],
-summary,
-label[for] {
+select,
+summary {
   cursor: pointer;
 }
 
-/* Make the entire post card show a pointer so it's obvious it is clickable */
-.post-item {
-  cursor: pointer;
-}
-.post-item * {
-  /* Ensure inner elements don't override the pointer (e.g., images, spans) */
-  cursor: inherit;
-}
-
-/* Disabled controls show not-allowed */
 button:disabled,
-[disabled] {
+[role="button"][aria-disabled="true"] {
   cursor: not-allowed;
-  opacity: 0.6; /* visual hint */
 }
 
-/* Utility class for manual use */
-.cursor-pointer {
-  cursor: pointer !important;
+::selection {
+  background: color-mix(in srgb, var(--brand) 28%, transparent);
+  color: inherit;
 }
 
-/* Accent utilities - ensure consistent accent color across themes */
-.text-accent-blue {
-  color: var(--accent-blue) !important;
-}
-.text-on-accent {
-  color: var(--text-on-accent) !important;
-}
-.hover\:text-on-accent:hover {
-  color: var(--text-on-accent) !important;
-}
-.bg-accent-blue {
-  background-color: var(--accent-blue) !important;
-}
-.border-accent-blue {
-  border-color: var(--accent-blue) !important;
-}
-.hover\:text-accent-blue:hover {
-  color: var(--accent-blue) !important;
-}
-.active-accent {
-  color: var(--accent-blue) !important;
-  font-weight: 600;
-}
-/* Removed problematic header/nav overrides that forced brand-color (invisible in dark mode) */
+/* ============================================================
+   Layout - reproduced from dileepa-dev, the reference implementation.
+   Only the pieces this single-page site actually uses.
+   ============================================================ */
 
-/* Animation Utilities */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.container {
+  width: min(100% - var(--space-8), 1020px);
+  max-width: none;
+  margin-inline: auto;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* --- Logo lockup -------------------------------------------------------- */
+
+.lockup {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.34em;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.lockup .wordmark {
+  font-family: var(--font-sans);
+  font-size: var(--text-h3);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--fg);
+  letter-spacing: var(--track-tight);
 }
 
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+.lockup .mark {
+  font-family: var(--font-sans);
+  font-size: var(--text-h3);
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+  color: var(--brand);
+  letter-spacing: var(--track-tight);
+  margin-left: 0;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+.lockup .mark::after {
+  content: "";
+  display: inline-block;
+  width: 0.22em;
+  height: 0.22em;
+  margin-left: 0;
+  margin-right: 0.1em;
+  border-radius: 50%;
+  background: var(--brand);
+  vertical-align: baseline;
 }
 
-.animate-slide-up {
-  animation: slideUp 0.5s ease-out forwards;
+/* --- Header & Navigation ------------------------------------------------ */
+
+.site-header {
+  position: sticky;
+  top: 1rem;
+  z-index: 40;
+  padding-top: 0.75rem;
 }
 
-.animate-slide-down {
-  animation: slideDown 0.5s ease-out forwards;
+.nav {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 var(--space-4);
+  background: var(--bg-surface);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-nav);
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
-/* Container Widths */
-.container-sm {
-  max-width: 640px;
-}
-.container-md {
-  max-width: 768px;
-}
-.container-lg {
-  max-width: 1024px;
-}
-.container-xl {
-  max-width: 1280px;
-}
-.container-2xl {
-  max-width: 1536px;
+/* --- Hero / identity ------------------------------------------------------*/
+
+.hero {
+  padding: var(--space-16) 0 var(--space-10);
+  text-align: center;
 }
 
-/* Typography Overrides for Prose */
-.prose {
-  --tw-prose-body: var(--text-primary);
-  --tw-prose-headings: var(--text-primary);
-  --tw-prose-lead: var(--text-secondary);
-  --tw-prose-links: var(--accent-blue);
-  --tw-prose-bold: var(--text-primary);
-  --tw-prose-counters: var(--text-tertiary);
-  --tw-prose-bullets: var(--text-tertiary);
-  --tw-prose-hr: var(--border-light);
-  --tw-prose-quotes: var(--text-primary);
-  --tw-prose-quote-borders: var(--border-light);
-  --tw-prose-captions: var(--text-tertiary);
-  --tw-prose-code: var(--text-primary);
-  --tw-prose-pre-code: var(--text-primary);
-  --tw-prose-pre-bg: var(--bg-secondary);
-  --tw-prose-th-borders: var(--border-light);
-  --tw-prose-td-borders: var(--border-light);
+/* The token sheet caps every `<p>` at `max-width: 68ch` as a measure limit
+   for running prose. In a centred column that cap quietly turns into a
+   left-aligned box as soon as the viewport is wider than it: the text
+   centres inside its own 68ch box, and the box itself sits flush left. The
+   cap is about 580px at --text-small, which is why the hero looked right on
+   a phone and drifted left on a desktop. Centre the box, not just the text. */
+.hero p {
+  margin-inline: auto;
 }
 
-/* Code blocks - theme aware using CSS variables */
-.code-block-wrapper pre {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-light);
-  padding: 1rem;
-  border-radius: var(--radius-md);
-  overflow: auto;
+.portrait {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--ink-800);
+  border: var(--hairline) solid var(--border-strong);
+  max-width: none;
+  margin-inline: auto;
+}
+
+.hero-name {
+  margin-top: var(--space-5);
+  font-size: var(--text-h1);
+  line-height: var(--lh-h1);
+  font-weight: 700;
+  letter-spacing: var(--track-tight);
+}
+
+/* "AI Engineer" is title case here, matching every other role *label* on the
+   platform - the Person schema's jobTitle, the line under the hero portrait
+   on dileepa-dev. It's the name of the role, not running prose, so the
+   sentence-case rule (which covers headings, buttons, nav and labels)
+   doesn't apply to it.
+
+   This is dileepa-dev's .hero-role, unchanged: plain sans at --text-small,
+   muted. A mono/tracked treatment was tried here first and reverted - the
+   monospace face's wider, uneven character spacing reads as off-centre
+   under a centred sans heading even though the box itself is centred, and
+   it invented a variant the reference doesn't have. */
+.hero-role {
+  margin-top: var(--space-2);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  color: var(--fg-muted);
+}
+
+/* A tighter measure than the sheet's 68ch default; `.hero p` centres it. */
+.hero-lead {
+  margin-top: var(--space-3);
+  color: var(--fg-muted);
+  max-width: 44ch;
+}
+
+/* --- Links list ------------------------------------------------------------
+   LinkCard's own rules live in components/link-card.css; this is just the
+   list wrapper. */
+
+.link-group {
+  margin-top: var(--space-10);
+}
+
+/* Space before the footer. Not `.link-group:last-of-type` - `QrModal` and
+   `#toast` are also `<div>`s and sit after the last group in the DOM, so
+   `:last-of-type` (which matches by tag, not class, and ignores `display`
+   or `hidden`) never resolves to it. Both of those trailing divs are out of
+   flow anyway (`QrModal` is `[hidden]`, `#toast` is `position: fixed`), so
+   `main` genuinely ends after the last group - put the padding there. */
+main {
+  padding-bottom: var(--space-16);
+}
+
+.link-group-title {
+  margin-bottom: var(--space-3);
+  padding-left: var(--space-1);
   font-family: var(--font-mono);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  /* keep consistent spacing when copy button appears */
-  position: relative;
+  font-size: var(--text-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
 }
 
-/* Shiki / MDX generated HTML often sets inline bg colours; override them to use theme variables */
-.code-block-wrapper pre.astro-code,
-.code-block-wrapper pre.shiki,
-.code-block-wrapper pre[class*="language-"] {
-  background: var(--bg-secondary) !important;
-  border-color: var(--border-light) !important;
-  /* Set base color, but allow children (tokens) to override via inline styles or specific rules */
-  color: var(--text-primary);
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
-/* Dark Mode: Activate Shiki's dual-theme variables for tokens */
-html.dark .code-block-wrapper pre.astro-code span,
-html.dark .code-block-wrapper pre.shiki span {
-  color: var(--shiki-dark) !important;
+/* --- Copy toast ------------------------------------------------------------*/
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-8);
+  transform: translate(-50%, 8px);
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--bg-raised);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  color: var(--fg);
+  font-size: var(--text-small);
+  font-weight: 500;
+  box-shadow: var(--shadow-nav);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
 }
 
-/* Fallback/Consistency for direct code children */
-.code-block-wrapper pre.astro-code > code,
-.code-block-wrapper pre.shiki > code,
-.code-block-wrapper pre[class*="language-"] > code {
-  background: transparent !important;
-  color: inherit;
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
-/* Remove token-level backgrounds or colors that conflict with theme */
-.code-block-wrapper .token {
-  background: transparent !important;
-  color: inherit !important;
+.toast svg {
+  width: 16px;
+  height: 16px;
+  color: var(--brand);
+  flex: 0 0 auto;
 }
 
-.code-block-wrapper pre code {
-  background: transparent;
-  color: inherit;
-  font-family: inherit;
+/* --- Footer ----------------------------------------------------------------*/
+
+.site-footer {
+  border-top: var(--hairline) solid var(--border);
+  padding: var(--space-8) 0;
+  margin-top: auto;
 }
 
-/* Ensure inline highlighted tokens (if any) follow theme */
-.code-block-wrapper .token.comment,
-.code-block-wrapper .token.punctuation,
-.code-block-wrapper .token.operator {
-  color: var(--text-tertiary) !important;
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: var(--text-small);
 }
 
-.dark .code-block-wrapper pre {
-  border-color: var(--border-light);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+.footer-inner a {
+  color: var(--fg-muted);
+  transition: color var(--dur) var(--ease);
 }
 
-/* If shiki wraps lines in <span style="background:..."> override them */
-.code-block-wrapper span[style*="background"] {
-  background: transparent !important;
+.footer-inner a:hover {
+  color: var(--brand);
+}
+
+/* The source links, reproduced from dileepa-dev's .footer-meta: mono, muted,
+   icon-led, separated by a hairline slash. Metadata about the build, not
+   navigation, which is why it is mono and quieter than the copyright line. */
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+  font-family: var(--font-mono);
+  letter-spacing: var(--track-label);
+}
+
+.footer-meta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.footer-meta svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.footer-sep {
+  color: var(--border-strong);
+}
+
+/* --- 404 --------------------------------------------------------------- */
+
+.error-page {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-16) 0;
+}
+
+.error-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-display);
+  line-height: 1;
+  color: var(--brand);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

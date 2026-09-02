@@ -1,8 +1,136 @@
-/* Component-specific styles for LinkCard component.
-   Add small utility overrides here if needed. */
+/* LinkCard - the one real component on the page.
+   Same radius, hairline border, surface colour, hover treatment and focus
+   ring as the platform card contract (dileepa-dev's .card / Card.tsx). */
 
-/* Ensure copy button uses consistent transition */
-.copy-btn {
-  transition: transform 140ms ease, background-color 160ms ease, color 160ms ease;
+.link-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  min-height: 64px;
+  background: var(--bg-surface);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  color: inherit;
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
 }
-.copy-btn:active { transform: scale(0.98); }
+
+.link-card:has(.link-card-hit:hover),
+.link-card:has(.link-card-hit:focus-visible) {
+  background: var(--surface-hover);
+  border-color: var(--brand);
+}
+
+.link-card:has(.link-card-hit:focus-visible) {
+  box-shadow: 0 0 0 var(--ring-width) var(--ring);
+}
+
+.link-card-hit:focus-visible {
+  outline: none;
+}
+
+.link-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  color: var(--fg-muted);
+  transition: color var(--dur) var(--ease);
+}
+
+.link-card:has(.link-card-hit:hover) .link-card-icon,
+.link-card:has(.link-card-hit:focus-visible) .link-card-icon {
+  color: var(--brand);
+}
+
+.link-card-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.link-card-body {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.link-card-name {
+  font-size: var(--text-h3);
+  line-height: var(--lh-h3);
+  font-weight: 500;
+  letter-spacing: var(--track-tight);
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link-card-handle {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  color: var(--fg-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The card's actual link target: a stretched overlay under everything
+   except the copy button, which sits above it in stacking order. A
+   <button> can't legally nest inside an <a> in HTML, so the card is a div
+   with this as its click target rather than making the whole card an
+   anchor. */
+.link-card-hit {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* Copy and QR sit above .link-card-hit in stacking order, same reason. */
+.link-card-actions {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.link-card-action {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.link-card-action:hover {
+  background: var(--raised-hover);
+  color: var(--fg);
+}
+
+.link-card-action:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ring-width) var(--ring);
+}
+
+.link-card-action svg {
+  width: 16px;
+  height: 16px;
+}

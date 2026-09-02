@@ -13,6 +13,59 @@ Changes are organized into the following categories:
 
 - Changes for the next release are available in development branches.
 
+## [v2.0.0] - 2026-09-02
+
+### Added - v2.0.0
+
+- `@astrojs/sitemap`, generating `sitemap-index.xml`
+- `robots.txt`
+- Prettier with the Astro plugin
+- Person and WebSite JSON-LD, matching the shape `dileepa-dev` builds
+- `src/icons/link-icons.ts` - a maintainable icon set keyed by name, replacing inline SVG
+  strings in the data file
+- The "AI Engineer" role label under the hero name
+- Links grouped by category (Site, Social, Contact) in `links.json`
+- A QR code action on every link card: click to see the link as a scannable code in a modal,
+  rendered client-side with `qrcode-generator`
+- The radial spotlight theme transition, ported from `dileepa-dev`'s `ThemeToggle.tsx`, with the
+  same instant-swap fallback for unsupported browsers and reduced motion
+- Footer "Source" and version links, matching `dileepa-dev`'s `.footer-meta` treatment
+- `docs/brand-tokens.css` and `docs/brand/` (icons, covers) vendored alongside `DESIGN.md`,
+  `docs/brand-guide.md`, and `docs/design-system.md`, completing the mirrored doc set
+
+### Changed - v2.0.0
+
+- Astro 5.17.1 → 7.2.10, done as its own commit ahead of the rebrand
+- Tailwind CSS 4.1.x → 4.3.x
+- Full rebrand against the v2.0.0 design system: brand tokens vendored from
+  `dileepadev/docs/brand/brand-tokens.css`, Manrope + JetBrains Mono at weights 400/500/700,
+  emerald as the only accent, the platform's lockup, nav, card and theme-toggle treatment
+- `src/data/links.json` - inline SVG strings replaced with icon keys; the Blog entry repointed
+  from `blog.dileepa.dev` to `dileepa.dev/blog` ahead of the blog's decommission (#3); restructured
+  into named groups instead of one flat list
+- Theme toggle now persists under the shared `dileepa-theme` storage key and keys off
+  `data-theme`, matching every other platform surface
+- The API-integration question is closed: link data stays static in `links.json`
+- `README.md` trimmed to stack, features, and getting started - brand and design-system detail
+  moved to `AGENTS.md`, where the rest of the platform's agent-facing documentation lives
+
+### Fixed - v2.0.0
+
+- The hero role and lead paragraphs no longer drift left of centre above roughly 580px viewport
+  width - the token sheet's `p { max-width: 68ch }` was overriding their centring
+- Restored the space between the last link card and the footer, lost to a
+  `.link-group:last-of-type` selector that never matched (`QrModal` and `#toast` are also
+  `<div>`s after it in the DOM)
+- The Facebook link now points at `facebook.com` rather than `www.facebook.com`
+
+### Removed - v2.0.0
+
+- `src/components/Welcome.astro` and `src/styles/components/welcome.css` - unused Astro
+  starter scaffolding
+- Microsoft Clarity and Google Analytics tags
+- v1 brand assets: navy/silver palette, Inter font, the old profile and banner images
+- `public/images/favicon.ico`, an unreferenced duplicate of `public/favicon.ico`
+
 ## [v1.0.0] - 2026-03-08
 
 ### Added - v1.0.0
@@ -58,4 +111,5 @@ Changes are organized into the following categories:
 <!-- v0.0.1 -->
 
 [Unreleased]: https://github.com/dileepadev/links-dileepa-dev/branches
+[v2.0.0]: https://github.com/dileepadev/links-dileepa-dev/releases/tag/v2.0.0
 [v1.0.0]: https://github.com/dileepadev/links-dileepa-dev/releases/tag/v1.0.0

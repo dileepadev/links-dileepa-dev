@@ -1,0 +1,134 @@
+/* QrModal - one shared instance, filled in per click. */
+
+.qr-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.qr-modal[hidden] {
+  display: none;
+}
+
+.qr-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ink-900) 72%, transparent);
+  animation: qr-fade-in var(--dur) var(--ease);
+}
+
+.qr-modal-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(100%, 320px);
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  background: var(--bg-surface);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-nav);
+  text-align: center;
+  animation: qr-pop-in var(--dur) var(--ease);
+}
+
+.qr-modal-close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.qr-modal-close:hover {
+  background: var(--surface-hover);
+  color: var(--fg);
+}
+
+.qr-modal-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ring-width) var(--ring);
+}
+
+.qr-modal-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.qr-modal-name {
+  font-size: var(--text-h3);
+  line-height: var(--lh-h3);
+  font-weight: 500;
+  letter-spacing: var(--track-tight);
+  color: var(--fg);
+}
+
+/* Always a plain white card, in both themes - a QR code is a scan target,
+   not a themed surface, and a low-contrast or inverted code can fail to
+   scan under real light. */
+.qr-modal-code {
+  padding: var(--space-4);
+  background: #ffffff;
+  border-radius: var(--radius);
+  line-height: 0;
+}
+
+.qr-modal-code svg {
+  display: block;
+  width: 200px;
+  height: 200px;
+}
+
+.qr-modal-url {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--fg-muted);
+}
+
+@keyframes qr-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes qr-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qr-modal-backdrop,
+  .qr-modal-panel {
+    animation: none;
+  }
+}

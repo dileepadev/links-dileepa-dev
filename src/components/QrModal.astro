@@ -1,0 +1,88 @@
+---
+import "../styles/components/qr-modal.css";
+---
+
+<div id="qr-modal" class="qr-modal" hidden>
+  <div class="qr-modal-backdrop" data-qr-close></div>
+  <div
+    class="qr-modal-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="qr-modal-title"
+  >
+    <button
+      type="button"
+      class="qr-modal-close"
+      data-qr-close
+      aria-label="Close"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <p id="qr-modal-title" class="qr-modal-name"></p>
+    <div class="qr-modal-code" id="qr-modal-code"></div>
+    <p class="qr-modal-url"></p>
+  </div>
+</div>
+
+<script>
+  import { renderQr } from "../scripts/qr";
+
+  const modal = document.getElementById("qr-modal")!;
+  const codeEl = document.getElementById("qr-modal-code")!;
+  const nameEl = modal.querySelector<HTMLElement>(".qr-modal-name")!;
+  const urlEl = modal.querySelector<HTMLElement>(".qr-modal-url")!;
+
+  let lastFocused: HTMLElement | null = null;
+
+  function open(name: string, url: string) {
+    lastFocused = document.activeElement as HTMLElement | null;
+    nameEl.textContent = name;
+    urlEl.textContent = url;
+    codeEl.innerHTML = renderQr(url);
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    modal.querySelector<HTMLElement>(".qr-modal-close")?.focus();
+  }
+
+  function close() {
+    modal.hidden = true;
+    document.body.style.overflow = "";
+    codeEl.innerHTML = "";
+    lastFocused?.focus();
+  }
+
+  modal.querySelectorAll("[data-qr-close]").forEach((el) => {
+    el.addEventListener("click", close);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.hidden) close();
+  });
+
+  document.querySelectorAll<HTMLElement>(".link-card").forEach((card) => {
+    const hit = card.querySelector<HTMLAnchorElement>(".link-card-hit");
+    const qrBtn = card.querySelector<HTMLButtonElement>(".link-card-qr");
+    if (!hit || !qrBtn) return;
+
+    const name = card.dataset.name ?? "";
+    const url = hit.href;
+
+    qrBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      open(name, url);
+    });
+  });
+</script>

@@ -3,6 +3,7 @@ import "../styles/global.css";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import pkg from "../../package.json";
 import links from "../data/links.json";
+import { LINK_ICONS } from "../icons/link-icons";
 
 interface Props {
   title?: string;
@@ -10,25 +11,38 @@ interface Props {
 }
 
 const {
-  title = "Links | Dileepa Bandara",
-  description = "A curated collection of links and social profiles.",
+  title = "Dileepa Bandara | Links",
+  description = "Building AI systems and the community around them.",
 } = Astro.props;
 
-const site = import.meta.env.SITE ?? "https://links.dileepa.dev";
+const site = Astro.site ?? new URL("https://links.dileepa.dev");
 const canonical = new URL(Astro.url.pathname, site).href;
-const ogImage = new URL("/images/cover.webp", site).href;
-const twitterHandle = "@dileepadev";
+const ogImage = new URL("/og.png", site).href;
 
+// Everything but the mailto entry counts as a social/reference profile of
+// the same person - Person.sameAs, matching the shape dileepa-dev builds.
 const sameAs = links
   .filter((l) => l.url && !l.url.startsWith("mailto:"))
   .map((l) => l.url);
 
-const jsonLd = JSON.stringify([
+// The footer's two source links, mirroring dileepa-dev's footer-meta: the
+// repository, and the branch this build came from. package.json's
+// `repository.url` carries npm's `.git` suffix, which is not a browsable URL.
+const repoUrl = pkg.repository.url.replace(/\.git$/, "");
+const repoBranch = "feat/v2.0.0";
+
+const personId = new URL("/#person", site).href;
+const websiteId = new URL("/#website", site).href;
+
+const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": personId,
     name: "Dileepa Bandara",
-    url: site,
+    alternateName: "dileepadev",
+    url: site.href,
+    jobTitle: "AI Engineer",
     sameAs,
     image: ogImage,
     description,
@@ -36,430 +50,170 @@ const jsonLd = JSON.stringify([
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    url: site,
+    "@id": websiteId,
     name: title,
+    url: site.href,
     description,
+    inLanguage: "en",
+    publisher: { "@id": personId },
   },
-]);
+];
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- The token sheet's own font @import doesn't survive being vendored
+         under `@layer` - `@import` is invalid there per spec, and the CSS
+         optimiser drops it with a warning. Loaded here instead, same URL,
+         same fonts, same weights. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
 
     <link rel="canonical" href={canonical} />
     <meta name="description" content={description} />
+
     <meta property="og:site_name" content="links.dileepa.dev" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={description} />
+    <meta property="og:locale" content="en_US" />
+
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content={twitterHandle} />
-    <meta name="twitter:creator" content={twitterHandle} />
+    <meta name="twitter:site" content="@dileepadev" />
+    <meta name="twitter:creator" content="@dileepadev" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta property="og:image:alt" content={description} />
     <meta name="twitter:image:alt" content={description} />
-    <meta property="og:locale" content="en_US" />
+
     <link rel="image_src" href={ogImage} />
+    <meta name="robots" content="index, follow" />
 
-    <script type="application/ld+json" is:inline>
-      {jsonLd}
-    </script>
-
-    <meta name="color-scheme" content="light dark" />
-    <meta
-      name="theme-color"
-      content="#ffffff"
-      media="(prefers-color-scheme: light)"
+    <!-- The favicon is the portrait, at every size - brand-guide.md §3.2 -
+         matching dileepa-dev rather than the reduced `/.` mark. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-96x96.png" sizes="96x96" type="image/png" />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-icon-180x180.png"
+      sizes="180x180"
     />
+    <link rel="manifest" href="/manifest.json" />
+
+    <meta name="color-scheme" content="dark light" />
     <meta
       name="theme-color"
-      content="#010204"
+      content="#050505"
       media="(prefers-color-scheme: dark)"
     />
-    <meta name="robots" content="index, follow" />
+    <meta
+      name="theme-color"
+      content="#f7f7f7"
+      media="(prefers-color-scheme: light)"
+    />
 
     <title>{title}</title>
 
-    <!-- Microsoft Clarity tracking code -->
-    <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "vrmjcmn1lm");
-    </script>
+    {
+      jsonLd.map((node) => (
+        <script type="application/ld+json" set:html={JSON.stringify(node)} />
+      ))
+    }
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV2BYSN5PN"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-KV2BYSN5PN');
-    </script>
-
+    <!-- Applies the persisted theme before first paint, so there is no
+         flash of the wrong theme. One storage key across the platform -
+         design-system.md §11 - "dileepa-theme". -->
     <script is:inline>
       (function () {
         try {
-          const stored =
-            typeof localStorage !== "undefined"
-              ? localStorage.getItem("theme")
-              : null;
-          const getSystem = () =>
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
+          var KEY = "dileepa-theme";
+          var stored = localStorage.getItem(KEY);
+          var theme =
+            stored ||
+            (window.matchMedia("(prefers-color-scheme: dark)").matches
               ? "dark"
-              : "light";
-          const theme = stored || getSystem();
-
-          // Apply initial theme
-          document.documentElement.className = theme;
-
-          // If user hasn't chosen a theme, listen for system preference changes
-          if (!stored && window.matchMedia) {
-            const mq = window.matchMedia("(prefers-color-scheme: dark)");
-            const handler = (e) => {
-              const newTheme = e.matches ? "dark" : "light";
-              // Only update if user still has no explicit choice
-              if (!localStorage.getItem("theme")) {
-                document.documentElement.className = newTheme;
-              }
-            };
-            if (typeof mq.addEventListener === "function") {
-              mq.addEventListener("change", handler);
-            } else if (typeof mq.addListener === "function") {
-              mq.addListener(handler);
-            }
-          }
+              : "light");
+          document.documentElement.setAttribute("data-theme", theme);
         } catch (err) {
-          // ignore - leave default theme
+          // Leave the token sheet's default (dark) in place.
         }
       })();
     </script>
   </head>
-  <body
-    class="bg-bg-primary text-text-primary antialiased min-h-screen flex flex-col pt-24"
-  >
-    <header class="fixed inset-x-0 top-5 z-50 transition-all duration-300">
-      <div
-        class="mx-auto w-[95%] max-w-5xl rounded-2xl bg-bg-elevated/80 backdrop-blur-xl border border-white/10 shadow-sm shadow-brand-primary/50"
-      >
-        <nav
-          class="px-4 md:px-6 h-14 md:h-16 flex items-center justify-between"
-        >
-          <a
-            href="/"
-            class="text-lg font-bold text-text-primary hover:text-accent-blue transition-colors tracking-tight"
-          >
-            /<span class="text-accent-blue">.</span>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="nav">
+          <a href="/" class="lockup">
+            <span class="wordmark">dileepadev</span><span
+              class="mark"
+              aria-hidden="true">/</span
+            >
           </a>
-          <!-- <div
-            class="hidden md:flex items-center gap-1 p-1 rounded-full border border-white/5 backdrop-blur-sm"
-          >
-            <a
-              href="/"
-              data-href="/"
-              class="nav-link px-4 py-1.5 text-xs font-medium transition-all duration-300 rounded-full text-text-muted hover:text-text-primary hover:bg-white/5"
-              >Home</a
-            >
-            <a
-              href="/about"
-              data-href="/about"
-              class="nav-link px-4 py-1.5 text-xs font-medium transition-all duration-300 rounded-full text-text-muted hover:text-text-primary hover:bg-white/5"
-              >About</a
-            >
-          </div> -->
-
-          <div
-            class="flex items-center gap-6 text-sm font-medium text-text-muted"
-          >
-            <ThemeToggle />
-            <!-- Mobile Menu Button -->
-            <!-- <button
-              id="mobile-menu-button"
-              class="md:hidden flex h-9 w-9 items-center justify-center rounded-full bg-bg-tertiary text-text-primary border border-white/10"
-              aria-label="Toggle menu"
-            >
-              <svg
-                id="hamburger-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-              </svg>
-              <svg
-                id="close-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="hidden"
-              >
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button> -->
-          </div>
-        </nav>
-
-        <!-- Mobile Menu -->
-        <!-- <div
-          id="mobile-menu"
-          class="md:hidden overflow-hidden transition-all duration-300 max-h-0"
-        >
-          <div class="flex flex-col gap-1 pt-4 border-t border-border-light">
-            <a
-              href="/"
-              data-href="/"
-              class="mobile-nav-link w-full text-left px-4 py-3 text-base font-medium text-text-secondary transition-colors hover:text-text-primary hover:bg-bg-secondary rounded-lg"
-            >
-              Home
-            </a>
-            <a
-              href="/about"
-              data-href="/about"
-              class="mobile-nav-link w-full text-left px-4 py-3 text-base font-medium text-text-secondary transition-colors hover:text-text-primary hover:bg-bg-secondary rounded-lg"
-            >
-              About
-            </a>
-          </div> -->
+          <ThemeToggle />
+        </div>
       </div>
     </header>
-  </body>
 
-  <main class="grow w-full max-w-4xl mx-auto px-4 py-8">
-    <slot />
-  </main>
+    <main class="container">
+      <slot />
+    </main>
 
-  <footer class="border-t border-border-light bg-bg-secondary">
-    <div
-      class="max-w-4xl mx-auto px-4 py-8 text-center text-text-primary text-sm"
-    >
-      <p>
-        &copy; {new Date().getFullYear()} Dileepa Bandara. All rights reserved.
-      </p>
-      <p class="mt-2">
-        <a
-          href="https://github.com/dileepadev/links-dileepa-dev"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 text-text-muted hover:text-text-primary transition-colors"
-          aria-label="View source on GitHub"
-          title="View source on GitHub"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            ><path
-              fill="currentColor"
-              d="M10.303 16.652c-2.837-.344-4.835-2.385-4.835-5.028c0-1.074.387-2.235 1.031-3.008c-.279-.709-.236-2.214.086-2.837c.86-.107 2.02.344 2.708.967c.816-.258 1.676-.386 2.728-.386s1.913.128 2.686.365c.666-.602 1.848-1.053 2.708-.946c.3.581.344 2.085.064 2.815c.688.817 1.053 1.913 1.053 3.03c0 2.643-1.998 4.641-4.877 5.006c.73.473 1.224 1.504 1.224 2.686v2.235c0 .644.537 1.01 1.182.752c3.889-1.483 6.94-5.372 6.94-10.185c0-6.081-4.942-11.044-11.022-11.044c-6.081 0-10.98 4.963-10.98 11.044a10.84 10.84 0 0 0 7.112 10.206c.58.215 1.139-.172 1.139-.752v-1.719a2.8 2.8 0 0 1-1.032.215c-1.418 0-2.256-.773-2.857-2.213c-.237-.58-.495-.924-.989-.988c-.258-.022-.344-.129-.344-.258c0-.258.43-.451.86-.451c.623 0 1.16.386 1.719 1.181c.43.623.881.903 1.418.903s.881-.194 1.375-.688c.365-.365.645-.687.903-.902"
-            ></path></svg
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; {new Date().getFullYear()} Dileepa Bandara</p>
+        <div class="footer-meta">
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View source on GitHub"
           >
-          <span>View source on GitHub (v{pkg.version})</span>
-        </a>
-      </p>
-    </div>
-  </footer>
-
-  <script is:inline>
-    // Navbar active-link & scroll-spy (desktop)
-    (function () {
-      const links = Array.from(document.querySelectorAll(".nav-link"));
-      const mobileLinks = Array.from(
-        document.querySelectorAll(".mobile-nav-link"),
-      );
-      const allLinks = [...links, ...mobileLinks];
-      if (!allLinks.length) return;
-
-      const baseClass =
-        "px-4 py-1.5 text-xs font-medium transition-all duration-300 rounded-full";
-      const activeClasses =
-        "bg-accent-blue text-on-accent shadow-lg shadow-accent-blue/25";
-      const inactiveClasses =
-        "text-text-muted hover:text-text-primary hover:bg-white/5";
-
-      const mobileBaseClass =
-        "w-full text-left px-4 py-3 text-base font-medium transition-colors rounded-lg";
-      const mobileActiveClasses = "bg-accent-blue text-on-accent";
-      const mobileInactiveClasses =
-        "text-text-secondary hover:text-text-primary hover:bg-bg-secondary";
-
-      function setActiveByPath() {
-        const path = window.location.pathname.replace(/\/$/, "") || "/";
-        allLinks.forEach((a) => {
-          const href = a.getAttribute("data-href");
-          if (!href) return;
-          const normalized = href.replace(/\/$/, "") || "/";
-          if (normalized === path) {
-            if (a.classList.contains("nav-link")) {
-              a.className = `${baseClass} ${activeClasses}`;
-              a.setAttribute("aria-current", "page");
-            } else if (a.classList.contains("mobile-nav-link")) {
-              a.className = `${mobileBaseClass} ${mobileActiveClasses}`;
-              a.setAttribute("aria-current", "page");
-            }
-          } else {
-            if (a.classList.contains("nav-link")) {
-              a.className = `${baseClass} ${inactiveClasses}`;
-              a.removeAttribute("aria-current");
-            } else if (a.classList.contains("mobile-nav-link")) {
-              a.className = `${mobileBaseClass} ${mobileInactiveClasses}`;
-              a.removeAttribute("aria-current");
-            }
-          }
-        });
-      }
-
-      // Scroll-spy for hash anchors
-      const sectionIds = links
-        .map((a) => a.getAttribute("href"))
-        .filter((h) => h && h.startsWith("#"))
-        .map((h) => h.slice(1));
-      let activeSection = null;
-
-      if (sectionIds.length > 0) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            const visible = entries.filter((e) => e.isIntersecting);
-            if (visible.length) {
-              visible.sort(
-                (a, b) =>
-                  (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0),
-              );
-              activeSection = visible[0].target.id;
-              allLinks.forEach((a) => {
-                const href = a.getAttribute("href");
-                const isHash = href && href.startsWith("#");
-                if (isHash && href === "#" + activeSection) {
-                  if (a.classList.contains("nav-link")) {
-                    a.className = `${baseClass} ${activeClasses}`;
-                    a.setAttribute("aria-current", "page");
-                  } else if (a.classList.contains("mobile-nav-link")) {
-                    a.className = `${mobileBaseClass} ${mobileActiveClasses}`;
-                    a.setAttribute("aria-current", "page");
-                  }
-                } else if (
-                  a.getAttribute("data-href") &&
-                  a.getAttribute("data-href") ===
-                    (window.location.pathname.replace(/\/$/, "") || "/")
-                ) {
-                  // leave path-based active as handled by setActiveByPath
-                } else {
-                  if (!isHash) return;
-                  if (a.classList.contains("nav-link")) {
-                    a.className = `${baseClass} ${inactiveClasses}`;
-                    a.removeAttribute("aria-current");
-                  } else if (a.classList.contains("mobile-nav-link")) {
-                    a.className = `${mobileBaseClass} ${mobileInactiveClasses}`;
-                    a.removeAttribute("aria-current");
-                  }
-                }
-              });
-            }
-          },
-          {
-            root: null,
-            rootMargin: "0px 0px -40% 0px",
-            threshold: [0.25, 0.5, 0.75],
-          },
-        );
-
-        sectionIds.forEach((id) => {
-          const el = document.getElementById(id);
-          if (el) observer.observe(el);
-        });
-      }
-
-      // Smooth scroll for hash links & click handling
-      allLinks.forEach((a) => {
-        a.addEventListener("click", (e) => {
-          const href = a.getAttribute("href");
-          if (href && href.startsWith("#")) {
-            e.preventDefault();
-            const id = href.slice(1);
-            const el = document.getElementById(id);
-            if (el) {
-              el.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-          } else {
-            // fallback to normal navigation, allow link to work
-            // update classes after navigation (will trigger on load)
-            setTimeout(setActiveByPath, 50);
-          }
-        });
-      });
-
-      // Initial set
-      setActiveByPath();
-
-      // Update on popstate
-      window.addEventListener("popstate", setActiveByPath);
-    })();
-
-    // Mobile Menu Toggle
-    (function () {
-      const menuButton = document.getElementById("mobile-menu-button");
-      const mobileMenu = document.getElementById("mobile-menu");
-      const hamburgerIcon = document.getElementById("hamburger-icon");
-      const closeIcon = document.getElementById("close-icon");
-
-      if (!menuButton || !mobileMenu || !hamburgerIcon || !closeIcon) return;
-
-      let isOpen = false;
-
-      menuButton.addEventListener("click", () => {
-        isOpen = !isOpen;
-
-        if (isOpen) {
-          mobileMenu.classList.remove("max-h-0");
-          mobileMenu.classList.add("max-h-96", "pb-4");
-          hamburgerIcon.classList.add("hidden");
-          closeIcon.classList.remove("hidden");
-        } else {
-          mobileMenu.classList.remove("max-h-96", "pb-4");
-          mobileMenu.classList.add("max-h-0");
-          hamburgerIcon.classList.remove("hidden");
-          closeIcon.classList.add("hidden");
-        }
-      });
-
-      // Close menu when clicking outside or on a link
-      mobileMenu.addEventListener("click", (e) => {
-        if (e.target.tagName === "A") {
-          isOpen = false;
-          mobileMenu.classList.remove("max-h-96", "pb-4");
-          mobileMenu.classList.add("max-h-0");
-          hamburgerIcon.classList.remove("hidden");
-          closeIcon.classList.add("hidden");
-        }
-      });
-    })();
-  </script>
+            <Fragment set:html={LINK_ICONS.github} />
+            <span>Source</span>
+          </a>
+          <span class="footer-sep" aria-hidden="true">/</span>
+          <a
+            href={`${repoUrl}/tree/${repoBranch}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`View branch ${repoBranch} on GitHub`}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <line x1="6" x2="6" y1="3" y2="15"></line>
+              <circle cx="18" cy="6" r="3"></circle>
+              <circle cx="6" cy="18" r="3"></circle>
+              <path d="M18 9a9 9 0 0 1-9 9"></path>
+            </svg>
+            <span>v{pkg.version}</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
