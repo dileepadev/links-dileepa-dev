@@ -24,19 +24,21 @@ full scope. The cross-repository roadmap lives in `dileepadev/TODO.md`.
 
 ## Layout
 
-| Path                               | Status                                                                |
-| ---------------------------------- | --------------------------------------------------------------------- |
-| `src/pages/index.astro`            | **Built.** The whole site - one page, links grouped by category       |
-| `src/pages/404.astro`              | **Built.**                                                            |
-| `src/layouts/Layout.astro`         | **Built.** SEO: canonical, Open Graph, Twitter cards, JSON-LD         |
-| `src/components/LinkCard.astro`    | **Built.** The one real component - link, copy, and QR actions        |
-| `src/components/ThemeToggle.astro` | **Built.** Radial spotlight transition, matching `dileepa-dev`        |
-| `src/components/QrModal.astro`     | **Built.** One shared instance, filled in per click                   |
-| `src/data/links.json`              | **Built.** Grouped: `{ group, links: [{ name, handle, url, icon }] }` |
-| `src/icons/link-icons.ts`          | **Built.** SVG markup keyed by `links.json`'s `icon` field            |
-| `src/scripts/qr.ts`                | **Built.** Client-side QR rendering via `qrcode-generator`            |
-| `src/styles/`                      | **Built.** `global.css`, `brand-tokens.css`, plus per-component CSS   |
-| `public/images/`                   | **Built.** portrait; favicon set and `og.png` at `public/` root       |
+| Path                               | Status                                                                  |
+| ---------------------------------- | ----------------------------------------------------------------------- |
+| `src/pages/index.astro`            | **Built.** The whole site - one page, links grouped by category         |
+| `src/pages/404.astro`              | **Built.**                                                              |
+| `src/layouts/Layout.astro`         | **Built.** SEO: canonical, Open Graph, Twitter cards, JSON-LD           |
+| `src/components/LinkCard.astro`    | **Built.** The one real component - link, copy, and QR actions          |
+| `src/components/ThemeToggle.astro` | **Built.** Radial spotlight transition, matching `dileepa-dev`          |
+| `src/components/QrModal.astro`     | **Built.** One shared instance, filled in per click                     |
+| `src/data/links.json`              | **Built.** Grouped: `{ group, links: [{ name, handle, url, icon }] }`   |
+| `src/icons/link-icons.ts`          | **Built.** SVG markup keyed by `links.json`'s `icon` field              |
+| `src/scripts/qr.ts`                | **Built.** Client-side QR rendering via `qrcode-generator`              |
+| `src/styles/`                      | **Built.** `global.css`, `brand-tokens.css`, plus per-component CSS     |
+| `public/images/`                   | **Built.** portrait; favicon set and `og.png` at `public/` root         |
+| `DESIGN.md`                        | **Vendored.** Platform design contract - agent-facing synthesis         |
+| `docs/`                            | **Vendored.** Brand guide, design system, mirrored tokens, brand assets |
 
 ## Toolchain
 
@@ -59,8 +61,18 @@ full scope. The cross-repository roadmap lives in `dileepadev/TODO.md`.
 
 ## Brand rules - v2.0.0
 
-Tokens come from `dileepadev/docs/brand/brand-tokens.css`, imported into `src/styles/global.css`
-and wired into Tailwind 4's `@theme`. Never re-declare values.
+Tokens come from `dileepadev/docs/brand/brand-tokens.css`, vendored here as
+`src/styles/brand-tokens.css` - imported into `src/styles/global.css` and wired into
+Tailwind 4's `@theme` - and mirrored for the doc set as `docs/brand-tokens.css`. Import them;
+never re-declare values.
+
+The vendored doc set - `DESIGN.md`, `docs/brand-guide.md`, `docs/design-system.md`,
+`docs/brand-tokens.css`, and the `docs/brand/` assets - is copied from `dileepa-dev` and run
+through Prettier, with no content edits. When a canonical file changes, re-copy it and run
+`npm run format`; never patch a copy in place. The single permitted deviation is the one
+recorded in `src/styles/brand-tokens.css`'s header: the Google Fonts `@import` is dropped,
+because an `@import` is invalid inside the `@layer` that sheet is imported into, and the fonts
+load from a `<link>` in `Layout.astro` instead.
 
 > [!IMPORTANT]
 > The HTML design reference still carries **v1.0 tokens** - `--cyan`, `--gold`, a different
