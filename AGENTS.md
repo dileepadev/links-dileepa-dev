@@ -59,41 +59,29 @@ full scope. The cross-repository roadmap lives in `dileepadev/TODO.md`.
 - Comments explain _why_, not _what_.
 - Link data belongs in `src/data/links.json`, never inline in a template.
 
-## Brand rules - v2.0.0
+## Brand rules — v2.1.0
 
-Tokens come from `dileepadev/docs/brand/brand-tokens.css`, vendored here as
-`src/styles/brand-tokens.css` - imported into `src/styles/global.css` and wired into
-Tailwind 4's `@theme` - and mirrored for the doc set as `docs/brand-tokens.css`. Import them;
-never re-declare values.
+These are the **v2.1.0** rules (dileepadev#4).
 
-The vendored doc set - `DESIGN.md`, `docs/brand-guide.md`, `docs/design-system.md`,
-`docs/brand-tokens.css`, and the `docs/brand/` assets - is copied from `dileepa-dev` and run
-through Prettier, with no content edits. When a canonical file changes, re-copy it and run
-`npm run format`; never patch a copy in place. The single permitted deviation is the one
-recorded in `src/styles/brand-tokens.css`'s header: the Google Fonts `@import` is dropped,
-because an `@import` is invalid inside the `@layer` that sheet is imported into, and the fonts
-load from a `<link>` in `Layout.astro` instead.
-
-> [!IMPORTANT]
-> The HTML design reference still carries **v1.0 tokens** - `--cyan`, `--gold`, a different
-> neutral ramp, Manrope aliased as the mono font, weights 600/800. Layout and structure only.
-> Every colour and type value comes from `brand-tokens.css`.
-
-- Emerald is the only accent. No second hue.
-- Never Emerald Deep on Carbon. Never Emerald Bright on Paper.
-- Manrope (UI) and JetBrains Mono (handles, metadata). Weights **400, 500, 700 only**.
-- Sentence case throughout.
-- **One emerald accent per surface.** This page is entirely a list of cards - the temptation to
-  tint every one is exactly what the rule exists to prevent.
-- `LinkCard` matches the platform card contract: same radius, hairline border, surface colour,
-  hover treatment, and focus ring as `dileepa.dev`.
-- The favicon is the portrait, at every size - brand-guide.md §3.2 - matching `dileepa-dev`
-  rather than the reduced `/.` mark, which stays reserved for in-product square placements.
-- Portrait background is `--ink-800` (the token, not a literal hex - it moved between guide
-  revisions and will again).
-- No hard-coded hex.
-
-`dileepa-dev` is the reference implementation. Match it rather than designing independently.
+- **No brand hue.** The accent is the text colour — `--brand` is Ink 100 `#F1F1F1` on Carbon and
+  Paper 900 `#131313` on Paper. Colour appears only as a state: `--success`, `--error`,
+  `--warning`. Never add a hue as an accent.
+- Components use semantic tokens only — never a hex, never a raw ramp token.
+- Three text steps: `--fg` for titles, `--fg-body` for running text, `--fg-muted` for metadata.
+- Manrope for display and UI, JetBrains Mono for code and data. No third family.
+- Weights 400, 500, 700 only. No 600. Every heading is 500; 700 is the display line and
+  `<strong>` only. Nothing smaller than 13px (`--text-label`).
+- Corners are fixed (panel, tile, block, inline), capsule (every control and field), or
+  concentric (a row inside a tile). Never invent a radius.
+- An edge means it acts: buttons, selects and interactive chips take `--border-strong`, fields
+  take `--border-input`, labels take none.
+- Every text link carries an arrow — `→` on the site, `↗` off it.
+- The logo is the handle, `@dileepadev`: the `@` in `--fg-muted`, the wordmark in `--fg`, both
+  Manrope 500, no gap. Black and white only.
+- Sentence case everywhere — headings, buttons, nav, labels.
+- Banned words, without exception: *passionate about, leveraging, cutting-edge, revolutionize,
+  game-changing, unlock, seamless, AI enthusiast, thought leader, journey, humbled to announce,
+  10x.*
 
 ## Testing
 
