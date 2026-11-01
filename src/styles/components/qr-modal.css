@@ -32,7 +32,7 @@
   padding: var(--space-8) var(--space-6) var(--space-6);
   background: var(--bg-surface);
   border: var(--hairline) solid var(--border-strong);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-tile);
   box-shadow: var(--shadow-nav);
   text-align: center;
   animation: qr-pop-in var(--dur) var(--ease);
@@ -48,7 +48,7 @@
   width: 32px;
   height: 32px;
   border: var(--hairline) solid transparent;
-  border-radius: var(--radius);
+  border-radius: var(--radius-block);
   background: transparent;
   color: var(--fg-muted);
   cursor: pointer;
@@ -86,7 +86,7 @@
 .qr-modal-code {
   padding: var(--space-4);
   background: #ffffff;
-  border-radius: var(--radius);
+  border-radius: var(--radius-block);
   line-height: 0;
 }
 

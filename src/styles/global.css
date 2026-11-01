@@ -54,7 +54,6 @@
 
   --radius-sm: var(--radius-sm);
   --radius-lg: var(--radius-lg);
-  --radius-xl: var(--radius-xl);
 
   --ease-brand: var(--ease);
 }
@@ -63,7 +62,7 @@
    it from the theme, so every `rounded` in the app was drawing 4px against a
    token that says 8px. */
 @utility rounded {
-  border-radius: var(--radius);
+  border-radius: var(--radius-block);
 }
 
 /* ============================================================
@@ -200,7 +199,7 @@ button:disabled,
 .lockup {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.34em;
+  gap: 0.02em;
   flex: 0 0 auto;
   white-space: nowrap;
 }
@@ -214,27 +213,15 @@ button:disabled,
   letter-spacing: var(--track-tight);
 }
 
+/* The "@" is the muted step of the wordmark's ink, at the same weight. */
 .lockup .mark {
   font-family: var(--font-sans);
   font-size: var(--text-h3);
-  font-weight: 700;
+  font-weight: 500;
   font-style: normal;
   line-height: 1;
-  color: var(--brand);
+  color: var(--fg-muted);
   letter-spacing: var(--track-tight);
-  margin-left: 0;
-}
-
-.lockup .mark::after {
-  content: "";
-  display: inline-block;
-  width: 0.22em;
-  height: 0.22em;
-  margin-left: 0;
-  margin-right: 0.1em;
-  border-radius: 50%;
-  background: var(--brand);
-  vertical-align: baseline;
 }
 
 /* --- Header & Navigation ------------------------------------------------ */
@@ -255,7 +242,7 @@ button:disabled,
   padding: 0 var(--space-4);
   background: var(--bg-surface);
   border: var(--hairline) solid var(--border-strong);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-tile);
   box-shadow: var(--shadow-nav);
   transition:
     background-color var(--dur) var(--ease),
