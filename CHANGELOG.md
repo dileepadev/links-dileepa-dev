@@ -46,6 +46,8 @@ Unreleased changes go here.
 - Profile panel reads "AI Engineer, Sri Lanka".
 - Correct the README, AGENTS and TODO to the released state.
 - Refresh the served OG card and portrait favicon set from the canonical root.
+- Drop the vendored `docs/brand/` folder (logo, icons, covers and a second copy of the OG card and
+  favicons). Only `public/` serves the OG card and favicons; the originals stay in `dileepadev`.
 - Record the exact vendored source and font-loading adaptation; update release
   scope, package/lockfile version and repository instructions.
 
