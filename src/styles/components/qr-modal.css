@@ -17,8 +17,9 @@
 .qr-modal-backdrop {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--ink-900) 72%, transparent);
+  background: color-mix(in srgb, var(--fg) 20%, transparent);
   animation: qr-fade-in var(--dur) var(--ease);
+  backdrop-filter: blur(8px);
 }
 
 .qr-modal-panel {
@@ -28,14 +29,28 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
-  width: min(100%, 320px);
+  /* 100% is as large as the window comfortably holds, capped at 520px, so a
+     shared code is readable across a room without zooming first. */
+  --qr-base: clamp(200px, min(58dvh, 100vw - 7.5rem), 520px);
+  width: min(
+    100%,
+    max(
+      320px,
+      calc(
+        var(--qr-code-size, var(--qr-base)) + var(--space-12) + var(--space-8) +
+          2 * var(--hairline)
+      )
+    )
+  );
   padding: var(--space-8) var(--space-6) var(--space-6);
   background: var(--bg-surface);
   border: var(--hairline) solid var(--border-strong);
   border-radius: var(--radius-tile);
-  box-shadow: var(--shadow-nav);
+  box-shadow: none;
   text-align: center;
   animation: qr-pop-in var(--dur) var(--ease);
+  max-height: calc(100dvh - var(--space-8));
+  overflow-y: auto;
 }
 
 .qr-modal-close {
@@ -45,10 +60,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: var(--hairline) solid transparent;
-  border-radius: var(--radius-block);
+  width: var(--control-h);
+  height: var(--control-h);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--fg-muted);
   cursor: pointer;
@@ -80,20 +95,71 @@
   color: var(--fg);
 }
 
+.qr-modal-viewport {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-block);
+}
+
 /* Always a plain white card, in both themes - a QR code is a scan target,
    not a themed surface, and a low-contrast or inverted code can fail to
    scan under real light. */
 .qr-modal-code {
+  width: max-content;
   padding: var(--space-4);
-  background: #ffffff;
+  background: transparent;
   border-radius: var(--radius-block);
   line-height: 0;
 }
 
 .qr-modal-code svg {
   display: block;
-  width: 200px;
-  height: 200px;
+  width: var(--qr-code-size, var(--qr-base));
+  height: var(--qr-code-size, var(--qr-base));
+  max-width: none;
+}
+
+.qr-modal-zoom {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.qr-modal-zoom output {
+  min-width: 4ch;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.qr-zoom-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h);
+  height: var(--control-h);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--fg);
+  transition: background var(--dur) var(--ease);
+}
+
+.qr-zoom-button:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.qr-zoom-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.qr-zoom-button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .qr-modal-url {

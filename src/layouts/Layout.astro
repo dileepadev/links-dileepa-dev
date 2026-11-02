@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import ThemeToggle from "../components/ThemeToggle.astro";
+import BackToTop from "../components/BackToTop.astro";
 import pkg from "../../package.json";
 import links from "../data/links.json";
 import { LINK_ICONS } from "../icons/link-icons";
@@ -25,11 +26,11 @@ const sameAs = links
   .filter((l) => l.url && !l.url.startsWith("mailto:"))
   .map((l) => l.url);
 
-// The footer's two source links, mirroring dileepa-dev's footer-meta: the
-// repository, and the branch this build came from. package.json's
-// `repository.url` carries npm's `.git` suffix, which is not a browsable URL.
+// Match the main site: the displayed version links to that version's release.
+// A deployment can lead or trail GitHub's latest release, so keep them paired.
 const repoUrl = pkg.repository.url.replace(/\.git$/, "");
-const repoBranch = "feat/v2.0.0";
+const releaseUrl = `${repoUrl}/releases/tag/v${pkg.version}`;
+const hasProfile = Astro.slots.has("profile");
 
 const personId = new URL("/#person", site).href;
 const websiteId = new URL("/#website", site).href;
@@ -157,60 +158,68 @@ const jsonLd = [
     </script>
   </head>
   <body>
-    <header class="site-header">
+    <header class:list={["site-header", hasProfile && "site-header--profile"]}>
       <div class="container">
         <div class="nav">
-          <a href="/" class="lockup">
-            <span class="mark" aria-hidden="true">@</span><span class="wordmark">dileepadev</span>
+          <a href="/" class="lockup" aria-label="dileepadev — links">
+            <span class="mark" aria-hidden="true">@</span><span class="wordmark"
+              >dileepadev</span
+            >
           </a>
           <ThemeToggle />
         </div>
       </div>
     </header>
 
-    <main class="container">
-      <slot />
-    </main>
+    <div class:list={["page-shell", hasProfile && "page-shell--profile"]}>
+      <slot name="profile" />
+      <div class="page-column">
+        <main><slot /></main>
 
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <p>&copy; {new Date().getFullYear()} Dileepa Bandara</p>
-        <div class="footer-meta">
-          <a
-            href={repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="View source on GitHub"
-          >
-            <Fragment set:html={LINK_ICONS.github} />
-            <span>Source</span>
-          </a>
-          <span class="footer-sep" aria-hidden="true">/</span>
-          <a
-            href={`${repoUrl}/tree/${repoBranch}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`View branch ${repoBranch} on GitHub`}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.75"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <line x1="6" x2="6" y1="3" y2="15"></line>
-              <circle cx="18" cy="6" r="3"></circle>
-              <circle cx="6" cy="18" r="3"></circle>
-              <path d="M18 9a9 9 0 0 1-9 9"></path>
-            </svg>
-            <span>v{pkg.version}</span>
-          </a>
-        </div>
+        <footer class="site-footer">
+          <div class="footer-bottom">
+            <div class="footer-legal">
+              <span>&copy; {new Date().getFullYear()} Dileepa Bandara</span>
+            </div>
+            <div class="footer-meta">
+              <a
+                href={repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View source on GitHub"
+              >
+                <Fragment set:html={LINK_ICONS.github} />
+                <span>Source</span>
+              </a>
+              <span class="footer-sep" aria-hidden="true">/</span>
+              <a
+                href={releaseUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Version ${pkg.version}: view this release on GitHub`}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"
+                  ></path>
+                  <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                </svg>
+                <span>v{pkg.version}</span>
+              </a>
+            </div>
+          </div>
+        </footer>
       </div>
-    </footer>
+    </div>
+    <BackToTop />
   </body>
 </html>

@@ -2,80 +2,72 @@
 import Layout from "../layouts/Layout.astro";
 import LinkCard from "../components/LinkCard.astro";
 import QrModal from "../components/QrModal.astro";
+import ProfilePanel from "../components/ProfilePanel.astro";
 import groups from "../data/links.json";
 
 const title = "Dileepa Bandara | Links";
 const description =
   "Building AI systems and the community around them. Find my socials and other links below.";
+const linkGroups = groups.map((group) => ({
+  ...group,
+  id: `links-${group.group.toLowerCase().replace(/\s+/g, "-")}`,
+}));
 ---
 
 <Layout title={title} description={description}>
-  <section class="hero">
-    <img
-      src="/images/profile.webp"
-      width="96"
-      height="96"
-      alt="Dileepa Bandara"
-      class="portrait"
-    />
-    <h1 class="hero-name">Dileepa Bandara</h1>
-    <p class="hero-role">AI Engineer</p>
-    <p class="hero-lead">Building AI systems and the community around them.</p>
-  </section>
+  <ProfilePanel
+    slot="profile"
+    sections={linkGroups.map((group) => ({ name: group.group, id: group.id }))}
+  />
 
-  {
-    groups.map((group) => (
-      <div class="link-group">
-        <p class="link-group-title">{group.group}</p>
-        <div class="links">
-          {group.links.map((link) => (
-            <LinkCard link={link} />
-          ))}
-        </div>
-      </div>
-    ))
-  }
+  <section class="links-panel" aria-labelledby="links-title">
+    <div class="links-panel-head">
+      <h2 id="links-title">Links</h2>
+      <p>My sites, social profiles and ways to get in touch.</p>
+    </div>
+    {
+      linkGroups.map((group) => (
+        <section
+          class="link-group"
+          id={group.id}
+          aria-labelledby={`${group.id}-title`}
+        >
+          <p class="link-group-title" id={`${group.id}-title`}>
+            {group.group}
+          </p>
+          <div class="links">
+            {group.links.map((link) => (
+              <LinkCard link={link} />
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </section>
 
   <QrModal />
 
-  <div id="toast" class="toast" role="status" aria-live="polite">
+  <div id="copy-status" class="sr-only" role="status" aria-live="polite"></div>
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+  >
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="3"
+      stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
       aria-hidden="true"
       focusable="false"
     >
-      <polyline points="20 6 9 17 4 12"></polyline>
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M12 8v4m0 4h.01"></path>
     </svg>
-    Copied to clipboard
+    <span id="copy-error-message"></span>
   </div>
 </Layout>
-
-<script>
-  const toast = document.getElementById("toast");
-  let hideTimer: ReturnType<typeof setTimeout> | undefined;
-
-  document.querySelectorAll<HTMLButtonElement>(".copy-btn").forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const url = btn.dataset.url;
-      if (!url) return;
-      try {
-        await navigator.clipboard.writeText(url);
-        toast?.classList.add("is-visible");
-        clearTimeout(hideTimer);
-        hideTimer = setTimeout(
-          () => toast?.classList.remove("is-visible"),
-          1800,
-        );
-      } catch (err) {
-        console.error("Failed to copy link", err);
-      }
-    });
-  });
-</script>

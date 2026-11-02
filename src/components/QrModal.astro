@@ -31,7 +31,51 @@ import "../styles/components/qr-modal.css";
       </svg>
     </button>
     <p id="qr-modal-title" class="qr-modal-name"></p>
-    <div class="qr-modal-code" id="qr-modal-code"></div>
+    <div class="qr-modal-viewport">
+      <div class="qr-modal-code" id="qr-modal-code"></div>
+    </div>
+    <div class="qr-modal-zoom" role="group" aria-label="QR code zoom">
+      <button
+        type="button"
+        id="qr-zoom-out"
+        class="qr-zoom-button"
+        aria-label="Zoom out"
+        aria-controls="qr-modal-code"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+          focusable="false"><path d="M5 12h14"></path></svg
+        >
+      </button>
+      <output
+        id="qr-zoom-level"
+        for="qr-zoom-out qr-zoom-in"
+        aria-live="polite"
+        aria-label="Zoom level">100%</output
+      >
+      <button
+        type="button"
+        id="qr-zoom-in"
+        class="qr-zoom-button"
+        aria-label="Zoom in"
+        aria-controls="qr-modal-code"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+          focusable="false"><path d="M5 12h14M12 5v14"></path></svg
+        >
+      </button>
+    </div>
     <p class="qr-modal-url"></p>
   </div>
 </div>
@@ -43,8 +87,68 @@ import "../styles/components/qr-modal.css";
   const codeEl = document.getElementById("qr-modal-code")!;
   const nameEl = modal.querySelector<HTMLElement>(".qr-modal-name")!;
   const urlEl = modal.querySelector<HTMLElement>(".qr-modal-url")!;
+  const panel = modal.querySelector<HTMLElement>(".qr-modal-panel")!;
+  const zoomOut = modal.querySelector<HTMLButtonElement>("#qr-zoom-out")!;
+  const zoomIn = modal.querySelector<HTMLButtonElement>("#qr-zoom-in")!;
+  const zoomLevel = modal.querySelector<HTMLOutputElement>("#qr-zoom-level")!;
 
   let lastFocused: HTMLElement | null = null;
+  let zoom = 100;
+  let levels = [100];
+
+  // A code that is cut off will not scan, so zoom never outgrows the window:
+  // the last step is the largest the whole code fits at, whatever the screen.
+  function measureLevels() {
+    const svg = codeEl.querySelector("svg");
+    if (!svg) return;
+    panel.style.setProperty("--qr-code-size", "var(--qr-base)");
+    // Layout sizes, not getBoundingClientRect: the open animation scales the panel.
+    const codeStyle = getComputedStyle(codeEl);
+    const pad =
+      parseFloat(codeStyle.paddingLeft) + parseFloat(codeStyle.paddingRight);
+    const base = codeEl.offsetWidth - pad;
+    const chrome = panel.offsetHeight - codeEl.offsetHeight;
+    const panelStyle = getComputedStyle(panel);
+    const sides =
+      parseFloat(panelStyle.paddingLeft) +
+      parseFloat(panelStyle.paddingRight) +
+      2 * parseFloat(panelStyle.borderLeftWidth);
+    const gutter = 2 * parseFloat(getComputedStyle(modal).paddingLeft);
+    const room = Math.min(
+      window.innerHeight - gutter - chrome - pad,
+      window.innerWidth - gutter - sides - pad,
+    );
+    const max = Math.max(50, Math.floor((room / base) * 100));
+    levels = [50, 75, 100, 125, 150, 175, 200, 250, 300, 400]
+      .filter((level) => level < max)
+      .concat(max);
+  }
+
+  function setZoom(next: number) {
+    zoom = levels.reduce((best, level) =>
+      Math.abs(level - next) < Math.abs(best - next) ? level : best,
+    );
+    panel.style.setProperty(
+      "--qr-code-size",
+      `calc(var(--qr-base) * ${zoom / 100})`,
+    );
+    zoomLevel.value = `${zoom}%`;
+    zoomOut.disabled = zoom === levels[0];
+    zoomIn.disabled = zoom === levels.at(-1);
+  }
+
+  function step(direction: 1 | -1) {
+    const at = levels.indexOf(zoom);
+    setZoom(levels[Math.min(levels.length - 1, Math.max(0, at + direction))]);
+  }
+
+  zoomOut.addEventListener("click", () => step(-1));
+  zoomIn.addEventListener("click", () => step(1));
+  window.addEventListener("resize", () => {
+    if (modal.hidden) return;
+    measureLevels();
+    setZoom(zoom);
+  });
 
   function open(name: string, url: string) {
     lastFocused = document.activeElement as HTMLElement | null;
@@ -52,6 +156,8 @@ import "../styles/components/qr-modal.css";
     urlEl.textContent = url;
     codeEl.innerHTML = renderQr(url);
     modal.hidden = false;
+    measureLevels();
+    setZoom(100);
     document.body.style.overflow = "hidden";
     modal.querySelector<HTMLElement>(".qr-modal-close")?.focus();
   }
@@ -68,7 +174,27 @@ import "../styles/components/qr-modal.css";
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.hidden) close();
+    if (modal.hidden) return;
+    if (e.key === "Escape") close();
+    if (e.key === "Tab") {
+      const controls = Array.from(
+        panel.querySelectorAll<HTMLElement>(
+          "button:not(:disabled), [tabindex='0']",
+        ),
+      );
+      const first = controls[0];
+      const last = controls.at(-1);
+      if (!controls.includes(document.activeElement as HTMLElement)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first)?.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    }
   });
 
   document.querySelectorAll<HTMLElement>(".link-card").forEach((card) => {

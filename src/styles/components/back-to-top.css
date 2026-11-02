@@ -1,0 +1,92 @@
+/* Matches dileepa-dev's floating control; the edge doubles as reading progress. */
+.back-to-top {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h);
+  height: var(--control-h);
+  min-height: 0;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  border: 0;
+  background: var(--bg-surface);
+  color: var(--fg-muted);
+  box-shadow: var(--shadow-nav);
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(var(--space-2)) scale(0.94);
+  pointer-events: none;
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease),
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.back-to-top.is-visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.back-to-top-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  fill: none;
+  pointer-events: none;
+}
+
+.back-to-top-track {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.back-to-top-progress {
+  stroke: var(--fg);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.back-to-top-arrow {
+  width: var(--space-4);
+  height: var(--space-4);
+  flex-shrink: 0;
+}
+
+.back-to-top:hover {
+  background: var(--surface-hover);
+  color: var(--fg);
+}
+
+.back-to-top:active {
+  background: var(--raised-hover);
+}
+
+.back-to-top:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ring-width) var(--ring);
+}
+
+@media (max-width: 640px) {
+  .back-to-top {
+    bottom: var(--space-4);
+    right: var(--space-4);
+    width: calc(var(--control-h) - var(--space-1));
+    height: calc(var(--control-h) - var(--space-1));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: none;
+  }
+}

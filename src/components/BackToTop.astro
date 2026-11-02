@@ -1,0 +1,85 @@
+---
+import "../styles/components/back-to-top.css";
+
+const radius = 19;
+const ringLength = 2 * Math.PI * radius;
+---
+
+<button
+  type="button"
+  class="back-to-top"
+  aria-label="Back to top"
+  title="Back to top"
+  aria-hidden="true"
+  tabindex="-1"
+>
+  <svg class="back-to-top-ring" viewBox="0 0 40 40" aria-hidden="true">
+    <circle class="back-to-top-track" cx="20" cy="20" r={radius}></circle>
+    <circle
+      class="back-to-top-progress"
+      cx="20"
+      cy="20"
+      r={radius}
+      stroke-dasharray={ringLength}
+      stroke-dashoffset={ringLength}></circle>
+  </svg>
+  <svg
+    class="back-to-top-arrow"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="m5 12 7-7 7 7"></path>
+    <path d="M12 19V5"></path>
+  </svg>
+</button>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>(".back-to-top");
+  const arc = button?.querySelector<SVGCircleElement>(".back-to-top-progress");
+
+  if (button && arc) {
+    const ringLength = 2 * Math.PI * arc.r.baseVal.value;
+    let frame = 0;
+
+    function update() {
+      frame = 0;
+      const scrollable = document.documentElement.scrollHeight - innerHeight;
+      const progress =
+        scrollable > 0 ? Math.min(1, Math.max(0, scrollY / scrollable)) : 0;
+      arc!.style.setProperty(
+        "stroke-dashoffset",
+        String(ringLength * (1 - progress)),
+      );
+
+      const visible = scrollY > 400;
+      button!.classList.toggle("is-visible", visible);
+      button!.setAttribute("aria-hidden", String(!visible));
+      button!.tabIndex = visible ? 0 : -1;
+    }
+
+    // Scroll bursts and late content changes share one update per frame.
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(update);
+    }
+
+    button.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      });
+    });
+
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    window.addEventListener("pageshow", schedule);
+    new ResizeObserver(schedule).observe(document.body);
+  }
+</script>

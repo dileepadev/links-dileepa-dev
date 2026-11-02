@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+package-lock.json
+
+# Canonical copies must remain byte-for-byte (runtime omits only font @import).
+src/styles/brand-tokens.css
+docs/
+DESIGN.md

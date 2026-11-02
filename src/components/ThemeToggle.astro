@@ -2,12 +2,7 @@
 import "../styles/components/theme-toggle.css";
 ---
 
-<button
-  id="theme-toggle"
-  type="button"
-  class="theme-toggle"
-  aria-label="Switch colour theme"
->
+<button type="button" class="theme-toggle" aria-label="Switch colour theme">
   <svg
     class="moon"
     viewBox="0 0 24 24"
@@ -46,7 +41,7 @@ import "../styles/components/theme-toggle.css";
   // One storage key across every platform surface - design-system.md §11 -
   // so the theme follows a visitor from the main site to links and back.
   const STORAGE_KEY = "dileepa-theme";
-  const button = document.getElementById("theme-toggle");
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".theme-toggle");
 
   // The radial spotlight transition, ported from dileepa-dev's
   // ThemeToggle.tsx: an aperture circle of the target theme expands from
@@ -59,7 +54,7 @@ import "../styles/components/theme-toggle.css";
     localStorage.setItem(STORAGE_KEY, next);
   }
 
-  function toggleTheme() {
+  function toggleTheme(button: HTMLButtonElement) {
     const current = document.documentElement.getAttribute("data-theme");
     const next = current === "dark" ? "light" : "dark";
 
@@ -108,7 +103,9 @@ import "../styles/components/theme-toggle.css";
     });
   }
 
-  button?.addEventListener("click", toggleTheme);
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => toggleTheme(button));
+  });
 
   const media = window.matchMedia("(prefers-color-scheme: dark)");
   media.addEventListener("change", (e) => {

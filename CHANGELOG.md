@@ -11,7 +11,40 @@ Changes are organized into the following categories:
 
 ## [Unreleased]
 
-- Changes for the next release are available in development branches.
+Prepared for **v2.1.0**, tracked in [#5](https://github.com/dileepadev/links-dileepa-dev/issues/5).
+Publication follows the canonical root tag.
+
+### Added
+
+- Floating back-to-top button with the main site's reading-progress ring,
+  responsive sizing, keyboard focus and reduced-motion support.
+- QR preview zoom controls from 50% up to the largest size that fits the window, opening at up to 520px so a shared code reads across a room, with a percentage readout,
+  contained scrolling and keyboard focus kept inside the dialog.
+
+### Changed
+
+- Match the main site's copy behaviour: two-second success tick on the pressed
+  button, polite screen-reader confirmation, fallback copying and failure-only toast.
+- Match the main site's footer typography, legal/meta alignment, spacing,
+  external-link arrows and panel treatment in both themes.
+- Link the footer version to its matching GitHub release, with the main site's
+  tag icon; match its Get in touch button and main-site contact destination.
+- Match the main site's sticky profile panel, edge-to-edge desktop portrait and
+  soft surfaces, with a compact profile panel above the grouped links on mobile.
+- Adopt the monochrome design contract: medium-weight headings, three text
+  contrast levels, capsule controls and panel/card surfaces in Carbon and Paper.
+- Links and 404 pages, identity and link panels, capsule actions, QR modal and copy feedback.
+- Match the website's rail sizes in the profile panel: 1.625rem name with -0.035em tracking,
+  category pills at the same padding and line height, the same height-aware spacing, and a
+  portrait frame that gives up height before anything below it, down to 13rem.
+- Centre the profile panel's role and description below 1024px (the token sheet's 68ch paragraph
+  cap left them off-centre) and start the panel on the same edge as the header and the links
+  panel.
+- Set the group labels (Site, Social, Contact) in Manrope like the main site's labels; the
+  monospace face stays on link handles, which are data.
+- Refresh the served OG card and portrait favicon set from the canonical root.
+- Record the exact vendored source and font-loading adaptation; update release
+  scope, package/lockfile version and repository instructions.
 
 ## [v2.0.0] - 2026-09-02
 
