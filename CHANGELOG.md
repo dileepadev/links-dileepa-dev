@@ -44,6 +44,7 @@ Unreleased changes go here.
 - Match the website's text and link arrows: group labels in the section-label style, link names
   at the tile-title size, and the website's icon arrows (↗ off the page, → for email).
 - Profile panel reads "AI Engineer, Sri Lanka".
+- Correct the README, AGENTS and TODO to the released state.
 - Refresh the served OG card and portrait favicon set from the canonical root.
 - Record the exact vendored source and font-loading adaptation; update release
   scope, package/lockfile version and repository instructions.

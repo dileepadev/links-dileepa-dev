@@ -19,9 +19,9 @@ from a social bio, so inconsistent branding here undercuts the rebrand everywher
 v2.0.0 applied the new design system, upgraded Astro across two majors, and closed the open
 question about whether link data should come from the API (static, see Gotchas).
 
-v2.0.0 is released. The current `feat/v2.1.0` branch prepares version `2.1.0`.
-[TODO.md](TODO.md) records the visual release scope; detailed tasks and verification
-belong in [issue #5](https://github.com/dileepadev/links-dileepa-dev/issues/5).
+v2.1.0 is released: the monochrome visual release. [TODO.md](TODO.md) records its scope;
+detailed tasks and verification are in
+[issue #5](https://github.com/dileepadev/links-dileepa-dev/issues/5).
 Brand provenance is recorded in
 [docs/brand-source.md](docs/brand-source.md).
 
@@ -145,8 +145,8 @@ None. This is a fully static site with no API calls and no credentials. `site` i
   is a `div` with an absolutely-positioned overlay link underneath the button, and `:has()`
   drives the card's hover/focus visuals off that inner link.
 - **One theme storage key across the platform:** `dileepa-theme`, keyed off `data-theme` on
-  `<html>` - not the `.dark`/`.light` class the v1 page used. Matches `dileepa-dev` exactly, so
-  a visitor's choice follows them between the two.
+  `<html>` - not the `.dark`/`.light` class the v1 page used. Matches `dileepa-dev`'s key, but the
+  two sites are different origins, so each remembers its own choice.
 
 - **The footer version links to that version's release,** matching `dileepa-dev`, rather than
   a branch or `/releases/latest`. The label comes from `package.json`; its release page is
@@ -177,5 +177,6 @@ None. This is a fully static site with no API calls and no credentials. `site` i
 - [docs/brand-source.md](docs/brand-source.md) records the source and the
   refresh procedure.
 - Detailed checklists belong in the GitHub issue, not in `TODO.md`.
-- The owner verified and committed this work. Merge, tag and GitHub release each
-  require owner approval.
+- Merge, tag and GitHub release each require owner approval.
+- **The QR preview never outgrows the window.** Zoom runs from 50% to the largest size the whole
+  code fits at, measured on open and on resize; a cropped code will not scan.
