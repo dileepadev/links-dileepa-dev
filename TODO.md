@@ -1,23 +1,20 @@
 # TODO
 
-This file tracks tasks, improvements, and features planned for upcoming updates or releases of this repository.
+## v2.1.0 — monochrome brand
 
-> [!Note]
-> This list is **not exhaustive** and may change over time. Items are not necessarily in priority order.
+Adopt the platform's Carbon and Paper design system on `feat/v2.1.0`.
+Detailed tasks, verification results and release checkmarks live in
+[issue #5](https://github.com/dileepadev/links-dileepa-dev/issues/5); update the issue as work progresses.
+This file records scope rather than duplicating its checklist.
 
-## Upcoming Tasks
+| Work                | Scope                                                                                                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Brand source        | Re-vendor both token sheets, keep the imported design docs exact and record [provenance](docs/brand-source.md)                                                     |
+| Interface           | Website-style profile panel and contact action, matching footer and release link, floating back-to-top progress ring, 404, QR zoom and website-style copy feedback |
+| Verification        | Both themes on every page at mobile and desktop widths, keyboard focus and existing build/check commands                                                           |
+| Release preparation | Package and lockfile version 2.1.0, changelog and current repository instructions                                                                                  |
+| Publication         | Approval before merge, tag and release                                                                                                                             |
 
-### v2.0.0 - platform migration ✅
-
-Full scope: [#2](https://github.com/dileepadev/links-dileepa-dev/issues/2). Cross-repository
-sequencing lives in [`dileepadev/TODO.md`](https://github.com/dileepadev/dileepadev/blob/main/TODO.md).
-
-- [x] **Repoint the Blog link at `https://dileepa.dev/blog`.** Done in `src/data/links.json` -
-      both `url` and the displayed `handle` (#3).
-- [x] Astro 5.17.1 → 7.2.10
-- [x] Import the brand tokens; rebuild against the shared design system
-
-<!-- Example Task List Format
-
-- [x] Task 1: Description of task 1.
-- [ ] Task 2: Description of task 2. -->
+Brand provenance is in `docs/brand-source.md`. Release order is root, dashboard, links page, then admin;
+the [platform roadmap](https://github.com/dileepadev/dileepadev/blob/main/TODO.md)
+tracks that order. Completed v2.0.0 work is recorded in `CHANGELOG.md` and its closed issue.

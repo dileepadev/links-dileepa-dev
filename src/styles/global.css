@@ -54,16 +54,17 @@
 
   --radius-sm: var(--radius-sm);
   --radius-lg: var(--radius-lg);
-  --radius-xl: var(--radius-xl);
 
   --ease-brand: var(--ease);
+  --color-fg-body: var(--fg-body);
+  --color-border-input: var(--border-input);
 }
 
 /* Tailwind 4 keeps bare `rounded` as a 0.25rem legacy alias and does not read
    it from the theme, so every `rounded` in the app was drawing 4px against a
    token that says 8px. */
 @utility rounded {
-  border-radius: var(--radius);
+  border-radius: var(--radius-block);
 }
 
 /* ============================================================
@@ -157,7 +158,7 @@ body {
   }
 
   h2 {
-    font-weight: 700;
+    font-weight: 500;
   }
 }
 
@@ -190,7 +191,7 @@ button:disabled,
    ============================================================ */
 
 .container {
-  width: min(100% - var(--space-8), 1020px);
+  width: min(100% - var(--space-10), 1020px);
   max-width: none;
   margin-inline: auto;
 }
@@ -200,7 +201,7 @@ button:disabled,
 .lockup {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.34em;
+  gap: 0;
   flex: 0 0 auto;
   white-space: nowrap;
 }
@@ -214,36 +215,24 @@ button:disabled,
   letter-spacing: var(--track-tight);
 }
 
+/* The "@" is the muted step of the wordmark's ink, at the same weight. */
 .lockup .mark {
   font-family: var(--font-sans);
   font-size: var(--text-h3);
-  font-weight: 700;
+  font-weight: 500;
   font-style: normal;
   line-height: 1;
-  color: var(--brand);
+  color: var(--fg-muted);
   letter-spacing: var(--track-tight);
-  margin-left: 0;
-}
-
-.lockup .mark::after {
-  content: "";
-  display: inline-block;
-  width: 0.22em;
-  height: 0.22em;
-  margin-left: 0;
-  margin-right: 0.1em;
-  border-radius: 50%;
-  background: var(--brand);
-  vertical-align: baseline;
 }
 
 /* --- Header & Navigation ------------------------------------------------ */
 
 .site-header {
   position: sticky;
-  top: 1rem;
+  top: 0;
   z-index: 40;
-  padding-top: 0.75rem;
+  padding-top: var(--space-5);
 }
 
 .nav {
@@ -252,10 +241,10 @@ button:disabled,
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-3) 0 var(--panel-pad);
   background: var(--bg-surface);
   border: var(--hairline) solid var(--border-strong);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-pill);
   box-shadow: var(--shadow-nav);
   transition:
     background-color var(--dur) var(--ease),
@@ -263,94 +252,86 @@ button:disabled,
     box-shadow var(--dur) var(--ease);
 }
 
-/* --- Hero / identity ------------------------------------------------------*/
+/* --- Profile shell and links panel -------------------------------------- */
 
-.hero {
-  padding: var(--space-16) 0 var(--space-10);
-  text-align: center;
+:root {
+  --panel-pad: clamp(var(--space-6), 0.5rem + 3vw, var(--space-12));
+  --panel-shadow:
+    0 1px 2px color-mix(in srgb, var(--fg) 4%, transparent),
+    0 12px 40px color-mix(in srgb, var(--fg) 6%, transparent);
 }
 
-/* The token sheet caps every `<p>` at `max-width: 68ch` as a measure limit
-   for running prose. In a centred column that cap quietly turns into a
-   left-aligned box as soon as the viewport is wider than it: the text
-   centres inside its own 68ch box, and the box itself sits flush left. The
-   cap is about 580px at --text-small, which is why the hero looked right on
-   a phone and drifted left on a desktop. Centre the box, not just the text. */
-.hero p {
+[data-theme="dark"] {
+  --panel-shadow: none;
+}
+
+.page-shell {
+  width: min(100% - var(--space-10), 1020px);
   margin-inline: auto;
+  padding-block: var(--space-6);
 }
 
-.portrait {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--ink-800);
-  border: var(--hairline) solid var(--border-strong);
-  max-width: none;
-  margin-inline: auto;
+.page-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
 }
 
-.hero-name {
-  margin-top: var(--space-5);
-  font-size: var(--text-h1);
-  line-height: var(--lh-h1);
-  font-weight: 700;
-  letter-spacing: var(--track-tight);
+main {
+  min-width: 0;
 }
 
-/* "AI Engineer" is title case here, matching every other role *label* on the
-   platform - the Person schema's jobTitle, the line under the hero portrait
-   on dileepa-dev. It's the name of the role, not running prose, so the
-   sentence-case rule (which covers headings, buttons, nav and labels)
-   doesn't apply to it.
+/* Match dileepa-dev's final soft panel treatment: depth on Paper,
+   a structural hairline on Carbon. Cards step down onto the page ground. */
+.profile-panel,
+.links-panel,
+.site-footer,
+.error-page {
+  background: var(--bg-surface);
+  border: 0;
+  border-radius: var(--radius-panel);
+  box-shadow: var(--panel-shadow);
+}
 
-   This is dileepa-dev's .hero-role, unchanged: plain sans at --text-small,
-   muted. A mono/tracked treatment was tried here first and reverted - the
-   monospace face's wider, uneven character spacing reads as off-centre
-   under a centred sans heading even though the box itself is centred, and
-   it invented a variant the reference doesn't have. */
-.hero-role {
-  margin-top: var(--space-2);
+[data-theme="dark"]
+  :is(.profile-panel, .links-panel, .site-footer, .error-page) {
+  border: var(--hairline) solid var(--border);
+}
+
+.links-panel {
+  padding: var(--panel-pad);
+}
+
+.links-panel-head {
+  margin-bottom: var(--space-8);
+}
+
+.links-panel-head p {
+  margin-top: var(--space-3);
+  color: var(--fg-body);
   font-size: var(--text-small);
   line-height: var(--lh-small);
-  color: var(--fg-muted);
 }
-
-/* A tighter measure than the sheet's 68ch default; `.hero p` centres it. */
-.hero-lead {
-  margin-top: var(--space-3);
-  color: var(--fg-muted);
-  max-width: 44ch;
-}
-
-/* --- Links list ------------------------------------------------------------
-   LinkCard's own rules live in components/link-card.css; this is just the
-   list wrapper. */
 
 .link-group {
-  margin-top: var(--space-10);
+  scroll-margin-top: 104px;
 }
 
-/* Space before the footer. Not `.link-group:last-of-type` - `QrModal` and
-   `#toast` are also `<div>`s and sit after the last group in the DOM, so
-   `:last-of-type` (which matches by tag, not class, and ignores `display`
-   or `hidden`) never resolves to it. Both of those trailing divs are out of
-   flow anyway (`QrModal` is `[hidden]`, `#toast` is `position: fixed`), so
-   `main` genuinely ends after the last group - put the padding there. */
-main {
-  padding-bottom: var(--space-16);
+.link-group + .link-group {
+  margin-top: var(--space-8);
+  padding-top: var(--space-8);
+  border-top: var(--hairline) solid var(--border);
 }
 
 .link-group-title {
   margin-bottom: var(--space-3);
   padding-left: var(--space-1);
   font-family: var(--font-mono);
-  font-size: var(--text-label);
-  line-height: var(--lh-label);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
   font-weight: 500;
   letter-spacing: var(--track-label);
-  text-transform: uppercase;
   color: var(--fg-muted);
 }
 
@@ -360,7 +341,32 @@ main {
   gap: var(--space-3);
 }
 
-/* --- Copy toast ------------------------------------------------------------*/
+@media (min-width: 1024px) {
+  .site-header--profile {
+    display: none;
+  }
+
+  .page-shell--profile {
+    display: grid;
+    grid-template-columns: 21rem minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-6);
+    width: min(100% - var(--space-10), 1320px);
+  }
+
+  .link-group {
+    scroll-margin-top: var(--space-6);
+  }
+}
+
+@media (max-width: 1023px) {
+  .page-shell--profile {
+    display: grid;
+    gap: var(--space-6);
+  }
+}
+
+/* --- Copy failure toast ---------------------------------------------------*/
 
 .toast {
   position: fixed;
@@ -372,76 +378,93 @@ main {
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-5);
-  background: var(--bg-raised);
-  border: var(--hairline) solid var(--border-strong);
-  border-radius: var(--radius-pill);
+  background: var(--bg-surface);
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-tile);
   color: var(--fg);
   font-size: var(--text-small);
   font-weight: 500;
-  box-shadow: var(--shadow-nav);
+  box-shadow: none;
   opacity: 0;
   pointer-events: none;
   transition:
     opacity var(--dur) var(--ease),
     transform var(--dur) var(--ease);
+  max-width: calc(100% - var(--space-8));
 }
 
 .toast.is-visible {
   opacity: 1;
   transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.toast span {
+  overflow-wrap: anywhere;
 }
 
 .toast svg {
   width: 16px;
   height: 16px;
-  color: var(--brand);
+  color: var(--error);
   flex: 0 0 auto;
 }
 
 /* --- Footer ----------------------------------------------------------------*/
 
 .site-footer {
-  border-top: var(--hairline) solid var(--border);
-  padding: var(--space-8) 0;
-  margin-top: auto;
+  padding: var(--space-8) var(--panel-pad);
+  margin-top: 0;
 }
 
-.footer-inner {
+@media (min-width: 1024px) {
+  .site-footer {
+    padding-block: var(--space-2);
+  }
+}
+
+/* The main site's local mono alias resolves to Manrope. Footer labels are
+   UI copy; keep that exception scoped here, alongside its legal-row layout. */
+.footer-bottom {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
-  text-align: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+  font-family: var(--font-sans);
   color: var(--fg-muted);
   font-size: var(--text-small);
+  line-height: var(--lh-small);
+  letter-spacing: var(--track-label);
 }
 
-.footer-inner a {
-  color: var(--fg-muted);
-  transition: color var(--dur) var(--ease);
-}
-
-.footer-inner a:hover {
-  color: var(--brand);
-}
-
-/* The source links, reproduced from dileepa-dev's .footer-meta: mono, muted,
-   icon-led, separated by a hairline slash. Metadata about the build, not
-   navigation, which is why it is mono and quieter than the copyright line. */
-.footer-meta {
+.footer-legal {
   display: flex;
   align-items: center;
   gap: var(--space-4);
   flex-wrap: wrap;
-  justify-content: center;
-  font-family: var(--font-mono);
-  letter-spacing: var(--track-label);
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  flex-wrap: wrap;
 }
 
 .footer-meta a {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+  font-family: var(--font-sans);
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+
+.footer-meta a:hover {
+  color: var(--brand);
 }
 
 .footer-meta svg {
@@ -454,6 +477,13 @@ main {
   color: var(--border-strong);
 }
 
+@media (max-width: 720px) {
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 /* --- 404 --------------------------------------------------------------- */
 
 .error-page {
@@ -464,7 +494,8 @@ main {
   justify-content: center;
   text-align: center;
   gap: var(--space-4);
-  padding: var(--space-16) 0;
+  padding: var(--space-12) var(--space-6);
+  margin-top: 0;
 }
 
 .error-code {
@@ -481,4 +512,28 @@ main {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.footer-meta a::after {
+  content: "";
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-left: 0.25em;
+  vertical-align: -0.05em;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7h10v10'/%3E%3Cpath d='M7 17 17 7'/%3E%3C/svg%3E")
+    no-repeat center / contain;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7h10v10'/%3E%3Cpath d='M7 17 17 7'/%3E%3C/svg%3E")
+    no-repeat center / contain;
+  opacity: 0.65;
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.footer-meta a:hover::after {
+  opacity: 1;
+}
+.error-page > p {
+  margin-inline: auto;
 }

@@ -4,13 +4,13 @@
 
 .theme-toggle {
   flex: 0 0 auto;
-  width: 36px;
-  height: 36px;
+  width: var(--control-h);
+  height: var(--control-h);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: var(--hairline) solid transparent;
-  border-radius: var(--radius);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--fg-muted);
   cursor: pointer;

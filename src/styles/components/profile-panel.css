@@ -1,0 +1,200 @@
+/* The website's ProfileRail: a square portrait above a compact identity,
+   action and category pills. Mobile keeps a small portrait above the links. */
+.profile-panel {
+  overflow: hidden;
+  min-width: 0;
+}
+
+.profile-media {
+  position: relative;
+  padding-top: var(--space-6);
+}
+
+.profile-photo {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin-inline: auto;
+  border-radius: 50%;
+  background: var(--bg-raised);
+  object-fit: cover;
+}
+
+.profile-theme {
+  display: none;
+}
+
+.profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  /* Below the desktop rail the panel shares the header's and the link
+     panel's inset, so all three start on one edge. */
+  padding: var(--space-6) var(--panel-pad) var(--space-8);
+  text-align: center;
+}
+
+.profile-name {
+  font-size: 1.625rem;
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+/* The token sheet caps every paragraph at 68ch; the panel's text is aligned
+   as a whole, so the cap would leave a centred line off-centre. */
+.profile-role,
+.profile-description {
+  max-width: none;
+}
+
+.profile-role {
+  margin-top: var(--space-1);
+  color: var(--fg-muted);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.profile-description {
+  margin: 0;
+  color: var(--fg-body);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.profile-action {
+  gap: var(--space-2);
+  width: 100%;
+  min-height: calc(var(--control-h) + var(--space-2));
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+
+.profile-action:hover {
+  background: color-mix(in srgb, var(--fg) 86%, var(--bg));
+  border-color: transparent;
+  color: var(--bg);
+}
+
+.profile-action svg {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+.profile-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.profile-nav a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  color: var(--fg-muted);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  font-weight: 500;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.profile-nav a:hover {
+  color: var(--fg);
+  background: var(--bg);
+}
+
+@media (min-width: 1024px) {
+  .profile-panel {
+    position: sticky;
+    top: var(--space-6);
+    max-height: calc(100dvh - 2 * var(--space-6));
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .profile-media {
+    padding: 0;
+  }
+
+  .profile-photo {
+    width: 100%;
+    height: auto;
+    max-width: none;
+    aspect-ratio: 1;
+    object-position: center 18%;
+    border-radius: 0;
+  }
+
+  .profile-theme {
+    display: block;
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+  }
+
+  .profile-theme .theme-toggle {
+    background: var(--bg-surface);
+    color: var(--fg);
+  }
+
+  .profile-body {
+    text-align: left;
+  }
+
+  .profile-nav ul {
+    justify-content: flex-start;
+  }
+}
+
+/* The website's rail closes its details up as the window gets shorter, so the
+   portrait keeps the face whole without the panel scrolling. Same
+   continuous clamps as its .rail-body, .rail-actions and .rail-name. */
+@media (min-width: 1024px) {
+  .profile-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* The frame keeps the portrait's square while there is room, then gives up
+     height before anything below it does, down to a face-sized 13rem. */
+  .profile-media {
+    display: flex;
+    flex: 0 1 auto;
+    aspect-ratio: 1 / 1;
+    min-height: 13rem;
+    overflow: hidden;
+  }
+
+  .profile-photo {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    object-position: center 45%;
+  }
+
+  .profile-body {
+    flex: 0 0 auto;
+    gap: clamp(var(--space-3), 5.45dvh - 25px, var(--space-6));
+    padding-inline: var(--space-6);
+    padding-block: clamp(var(--space-4), 3.64dvh - 8.7px, var(--space-6))
+      clamp(var(--space-4), 7.27dvh - 33.5px, var(--space-8));
+  }
+
+  .profile-action {
+    min-height: clamp(40px, 3.64dvh + 15.3px, 48px);
+  }
+
+  .profile-name {
+    font-size: clamp(1.375rem, 1.82dvh + 9.6px, 1.625rem);
+  }
+}

@@ -1,0 +1,78 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import groups from "../data/links.json";
+import "../styles/components/profile-panel.css";
+
+interface Props {
+  sections: { name: string; id: string }[];
+}
+
+const { sections } = Astro.props;
+const website = groups
+  .flatMap((group) => group.links)
+  .find((link) => link.icon === "website");
+const contactUrl = website && new URL("/#contact", website.url).href;
+---
+
+<aside class="profile-panel" aria-label="Profile and link categories">
+  <div class="profile-media">
+    <img
+      src="/images/profile.webp"
+      width="640"
+      height="640"
+      alt="Dileepa Bandara"
+      class="profile-photo"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="profile-theme"><ThemeToggle /></div>
+  </div>
+
+  <div class="profile-body">
+    <div>
+      <h1 class="profile-name">Dileepa Bandara</h1>
+      <p class="profile-role">AI Engineer, Sri Lanka</p>
+    </div>
+    <p class="profile-description">
+      Building AI systems and the community around them.
+    </p>
+
+    {
+      contactUrl && (
+        <a
+          href={contactUrl}
+          class="btn btn--primary profile-action"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+          </svg>
+          Get in touch
+        </a>
+      )
+    }
+
+    <nav aria-label="Link categories" class="profile-nav">
+      <ul>
+        {
+          sections.map((section) => (
+            <li>
+              <a href={`#${section.id}`}>{section.name}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</aside>

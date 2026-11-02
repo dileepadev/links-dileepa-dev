@@ -58,6 +58,7 @@ const isExternal = !link.url.startsWith("mailto:");
       aria-label={`Copy link to ${link.name}`}
     >
       <svg
+        class="copy-icon"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -71,6 +72,106 @@ const isExternal = !link.url.startsWith("mailto:");
         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
         ></path>
       </svg>
+      <svg
+        class="copy-tick"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M20 6 9 17l-5-5"></path>
+      </svg>
     </button>
   </div>
 </div>
+
+<script>
+  const status = document.getElementById("copy-status");
+  const toast = document.getElementById("toast");
+  const errorMessage = document.getElementById("copy-error-message");
+  let announcementTimer: ReturnType<typeof setTimeout> | undefined;
+  let errorTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function hideError() {
+    toast?.classList.remove("is-visible");
+    if (errorMessage) errorMessage.textContent = "";
+  }
+
+  async function writeClipboard(text: string) {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    // Plain-HTTP previews and older browsers have no Clipboard API.
+    const focused = document.activeElement;
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.readOnly = true;
+    area.tabIndex = -1;
+    area.setAttribute("aria-hidden", "true");
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.append(area);
+    try {
+      area.select();
+      if (!document.execCommand("copy"))
+        throw new Error("Copy command refused");
+    } finally {
+      area.remove();
+      if (focused instanceof HTMLElement)
+        focused.focus({ preventScroll: true });
+    }
+  }
+
+  document
+    .querySelectorAll<HTMLButtonElement>(".copy-btn")
+    .forEach((button) => {
+      const label = button.getAttribute("aria-label")!;
+      let resetTimer: ReturnType<typeof setTimeout> | undefined;
+
+      function reset() {
+        button.classList.remove("is-copied");
+        button.setAttribute("aria-label", label);
+        button.title = label;
+      }
+
+      button.addEventListener("click", async () => {
+        const url = button.dataset.url;
+        if (!url) return;
+
+        try {
+          await writeClipboard(url);
+        } catch {
+          clearTimeout(resetTimer);
+          reset();
+          if (errorMessage) {
+            errorMessage.textContent = `Copy failed. Copy this address instead: ${url}`;
+          }
+          toast?.classList.add("is-visible");
+          clearTimeout(errorTimer);
+          errorTimer = setTimeout(hideError, 4000);
+          return;
+        }
+
+        hideError();
+        clearTimeout(errorTimer);
+        button.classList.add("is-copied");
+        button.setAttribute("aria-label", "Copied");
+        button.title = "Copied";
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(reset, 2000);
+
+        // Clearing first lets assistive technology announce repeated copies.
+        clearTimeout(announcementTimer);
+        if (status) status.textContent = "";
+        announcementTimer = setTimeout(() => {
+          if (status) status.textContent = "Copied to clipboard";
+        }, 50);
+      });
+    });
+</script>
