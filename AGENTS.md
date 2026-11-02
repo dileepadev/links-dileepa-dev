@@ -22,7 +22,7 @@ question about whether link data should come from the API (static, see Gotchas).
 v2.0.0 is released. The current `feat/v2.1.0` branch prepares version `2.1.0`.
 [TODO.md](TODO.md) records the visual release scope; detailed tasks and verification
 belong in [issue #5](https://github.com/dileepadev/links-dileepa-dev/issues/5).
-Brand provenance and the pending root-tag dependency are recorded in
+Brand provenance is recorded in
 [docs/brand-source.md](docs/brand-source.md).
 
 ## Layout
@@ -172,10 +172,10 @@ None. This is a fully static site with no API calls and no credentials. `site` i
 - `docs/brand-tokens.css`, `docs/brand-guide.md`, `docs/design-system.md` and
   `DESIGN.md` are exact canonical copies. Re-copy; never tune a copy in place.
 - The runtime token sheet removes only the Google Fonts import. Its header
-  records the source commit and how fonts load. Application-specific styles
+  records the source and how fonts load. Application-specific styles
   use semantic tokens in global/component CSS.
-- [docs/brand-source.md](docs/brand-source.md) records the current provisional
-  source. Recheck against the root `v2.1.0` tag before release.
+- [docs/brand-source.md](docs/brand-source.md) records the source and the
+  refresh procedure.
 - Detailed checklists belong in the GitHub issue, not in `TODO.md`.
 - The owner verified and committed this work. Merge, tag and GitHub release each
   require owner approval.

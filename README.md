@@ -8,7 +8,7 @@ link people open from a social bio.
 The monochrome update is being prepared on `feat/v2.1.0`; it is not released.
 [Issue #5](https://github.com/dileepadev/links-dileepa-dev/issues/5) tracks implementation,
 verification and publication. [Brand provenance](docs/brand-source.md) records the
-canonical source and the root tag that must be verified before release.
+canonical source.
 
 ## Stack
 

@@ -11,15 +11,16 @@ Changes are organized into the following categories:
 
 ## [Unreleased]
 
-Prepared for **v2.1.0**, tracked in [#5](https://github.com/dileepadev/links-dileepa-dev/issues/5).
-Publication follows the canonical root tag.
+Unreleased changes go here.
+
+## [v2.1.0] - 2026-11-02
 
 ### Added
 
 - Floating back-to-top button with the main site's reading-progress ring,
   responsive sizing, keyboard focus and reduced-motion support.
-- QR preview zoom controls from 50% up to the largest size that fits the window, opening at up to 520px so a shared code reads across a room, with a percentage readout,
-  contained scrolling and keyboard focus kept inside the dialog.
+- QR preview zoom controls from 50% up to the largest size that fits the window, opening at up to 520px so a shared code reads across a room, with a percentage readout
+  and keyboard focus kept inside the dialog. The code is never cut off or scrolled.
 
 ### Changed
 
@@ -40,8 +41,9 @@ Publication follows the canonical root tag.
 - Centre the profile panel's role and description below 1024px (the token sheet's 68ch paragraph
   cap left them off-centre) and start the panel on the same edge as the header and the links
   panel.
-- Set the group labels (Site, Social, Contact) in Manrope like the main site's labels; the
-  monospace face stays on link handles, which are data.
+- Match the website's text and link arrows: group labels in the section-label style, link names
+  at the tile-title size, and the website's icon arrows (↗ off the page, → for email).
+- Profile panel reads "AI Engineer, Sri Lanka".
 - Refresh the served OG card and portrait favicon set from the canonical root.
 - Record the exact vendored source and font-loading adaptation; update release
   scope, package/lockfile version and repository instructions.
@@ -144,5 +146,6 @@ Publication follows the canonical root tag.
 <!-- v0.0.1 -->
 
 [Unreleased]: https://github.com/dileepadev/links-dileepa-dev/branches
+[v2.1.0]: https://github.com/dileepadev/links-dileepa-dev/releases/tag/v2.1.0
 [v2.0.0]: https://github.com/dileepadev/links-dileepa-dev/releases/tag/v2.0.0
 [v1.0.0]: https://github.com/dileepadev/links-dileepa-dev/releases/tag/v1.0.0

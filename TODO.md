@@ -13,9 +13,8 @@ This file records scope rather than duplicating its checklist.
 | Interface           | Website-style profile panel and contact action, matching footer and release link, floating back-to-top progress ring, 404, QR zoom and website-style copy feedback |
 | Verification        | Both themes on every page at mobile and desktop widths, keyboard focus and existing build/check commands                                                           |
 | Release preparation | Package and lockfile version 2.1.0, changelog and current repository instructions                                                                                  |
-| Publication         | Verified and committed; verify the published root tag before releasing; approval before merge, tag and release                                                     |
+| Publication         | Approval before merge, tag and release                                                                                                                             |
 
-The root `v2.1.0` tag is pending. Local work uses the pinned source recorded in
-`docs/brand-source.md`. Release order is root, dashboard, links page, then admin;
+Brand provenance is in `docs/brand-source.md`. Release order is root, dashboard, links page, then admin;
 the [platform roadmap](https://github.com/dileepadev/dileepadev/blob/main/TODO.md)
 tracks that order. Completed v2.0.0 work is recorded in `CHANGELOG.md` and its closed issue.
